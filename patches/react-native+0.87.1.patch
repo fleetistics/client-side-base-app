@@ -1,0 +1,19 @@
+diff --git a/node_modules/react-native/src/private/renderer/errorhandling/ErrorHandlers.js b/node_modules/react-native/src/private/renderer/errorhandling/ErrorHandlers.js
+index 0000000..0000000 100644
+--- a/node_modules/react-native/src/private/renderer/errorhandling/ErrorHandlers.js
++++ b/node_modules/react-native/src/private/renderer/errorhandling/ErrorHandlers.js
+@@ -67,6 +67,14 @@ export function onUncaughtError(
+ }
+ 
+ export function onCaughtError(errorValue: unknown, errorInfo: ErrorInfo): void {
++  // Dev-only opt-out for boundaries that already render their own error UI (e.g.
++  // AppErrorBoundary) so a crash isn't also shown as a redundant dev LogBox overlay
++  // on top of it. Duck-typed off the boundary instance to avoid an app-code import
++  // here; production behavior (crash reporting, etc.) is untouched.
++  if (__DEV__ && (errorInfo.errorBoundary as $FlowFixMe)?.suppressLogBoxOnCaughtError === true) {
++    return;
++  }
++
+   const error = getExtendedError(errorValue, errorInfo);
+ 
+   // Caught errors are not fatal.

@@ -1,0 +1,5 @@
+<resources>
+    <color name="colorAppMain">#055085</color>
+    <color name="light_background">#ffffff</color>
+    <color name="dark_background">#000000</color>
+</resources>

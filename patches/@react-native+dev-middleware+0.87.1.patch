@@ -1,0 +1,22 @@
+diff --git a/node_modules/@react-native/dev-middleware/dist/inspector-proxy/InspectorProxy.js b/node_modules/@react-native/dev-middleware/dist/inspector-proxy/InspectorProxy.js
+index 0f14ba1..582ed4c 100644
+--- a/node_modules/@react-native/dev-middleware/dist/inspector-proxy/InspectorProxy.js
++++ b/node_modules/@react-native/dev-middleware/dist/inspector-proxy/InspectorProxy.js
+@@ -370,6 +370,17 @@ class InspectorProxy {
+         if (this.#serverBaseUrl.origin === info.origin) {
+           return true;
+         }
++        // Local patch: some Chromium versions omit the Origin header on the
++        // WebSocket handshake opened internally by the vendored DevTools
++        // frontend (rn_fusebox.js), even though a page-level WebSocket sends
++        // it correctly. A missing Origin can't come from a malicious foreign
++        // page (that would carry a real, non-empty Origin, still rejected
++        // below), so accepting it only closes this specific compatibility
++        // gap without reopening the cross-origin protection this check
++        // exists for.
++        if (info.origin === undefined || info.origin === "") {
++          return true;
++        }
+         if (URL.canParse(info.origin)) {
+           const { hostname } = new URL(info.origin);
+           if (WS_DEBUGGER_ALLOWED_ORIGIN_HOSTNAMES.has(hostname)) {
