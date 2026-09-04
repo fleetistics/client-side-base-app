@@ -20,6 +20,9 @@ export function RootPage() {
       <Button variant="outline" onPress={() => navigation.navigate('CrashTestPage')}>
         <Text>Crash Test</Text>
       </Button>
+      <Button onPress={() => navigation.navigate('MainMap')}>
+        <Text>Map</Text>
+      </Button>
     </View>
   );
 }

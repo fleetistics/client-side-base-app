@@ -14,7 +14,7 @@ class MainActivity : ReactActivity() {
    * Returns the name of the main component registered from JavaScript. This is used to schedule
    * rendering of the component.
    */
-  override fun getMainComponentName(): String = "fltProtoApp"
+  override fun getMainComponentName(): String = "BaseApp"
 
   /**
    * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]
@@ -27,7 +27,7 @@ class MainActivity : ReactActivity() {
   * added for react-native-splash-view
   */
   override fun onCreate(savedInstanceState: Bundle?) {
-    SplashView.showSplashView(this) // Show the splash screen
     super.onCreate(savedInstanceState)
+    SplashView.showSplashView(this) // Show the splash screen
   }
 }

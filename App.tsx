@@ -18,6 +18,9 @@ import { InitAppStateListener } from '@/app.Impl/services/app-state-context';
 import { MediaUploadService } from '@/app.Impl/services/media-uploader/mediaUploadService';
 import { initLogger } from '@/app.Impl/services/logging/logger';
 import { AppErrorBoundary } from '@/app.Impl/initComponents/app-error-boundary';
+import { initI18n } from '@/app.Commons/i18n/i18n';
+import { useTranslationUpdater } from '@/app.Commons/i18n/translationUpdater';
+import { reactNativeI18nPlatform } from '@/app.Impl/i18n/platform';
 
 
 function App() {
@@ -27,10 +30,15 @@ function App() {
     console.log('Start App');
     InitAppStateListener();
     MediaUploadService.Create();
+    void initI18n(reactNativeI18nPlatform, { testMode: true });
     setTimeout(() => {
       hideSplash();
     }, 4000);
   }, []);
+
+  // Background translation refresh — mount once at the app root, after the initI18n()
+  // call above (declared first, so its effect registers the platform before this one runs).
+  useTranslationUpdater();
 
   return (
     <AppErrorBoundary>

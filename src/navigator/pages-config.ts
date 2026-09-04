@@ -3,6 +3,7 @@ import { RootPage } from '@/pages/core/RootPage';
 import { EditUserProfile } from '@/pages/core/EditUserProfile';
 import { ReportIssuePage } from '@/pages/core/ReportIssuePage';
 import { CrashTestPage } from '@/pages/core/CrashTestPage';
+import { MapPage } from '@/pages/map/MapPage';
 
 export type NavigatorPages = {
     TfTestingPage: undefined;
@@ -46,6 +47,10 @@ const corePages: NavigatorItem[] = [
     {
         name: 'CrashTestPage',
         component: CrashTestPage
+    },
+    {
+        name: 'MainMap',
+        component: MapPage
     }
 ];
 

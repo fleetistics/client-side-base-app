@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/ui/text';
 import { ControlField } from '@/components/ui/form/control-field';
 import { SubmitButton } from '@/components/ui/form/submit-button';
@@ -13,6 +14,10 @@ import { BuildPatchValue, StartMediaUpload } from '@/app.Commons/helpers/form-he
 
 
 export function EditUserProfile() {
+  // Sample usage of the shared i18n setup (see app.Commons/i18n): t()'s argument is the
+  // English source string itself — the translations backend keys resources by that text,
+  // not by a separate id — so it doubles as the untranslated fallback with zero setup.
+  const { t } = useTranslation();
   const { data: currentEntity, isLoading } = useGetMyUser();
   const [patchUser] = usePatchUser();
   const isSubmittingRef = useRef(false);
@@ -62,23 +67,23 @@ export function EditUserProfile() {
         {isLoading && (
           <View className="flex-row items-center gap-2">
             <ActivityIndicator size="small" />
-            <Text className="text-sm text-muted-foreground">Loading</Text>
+            <Text className="text-sm text-muted-foreground">{t('Loading')}</Text>
           </View>
         )}
         <MediaSelector
           control={control}
           name="Medias"
-          label="Avatar"
+          label={t('Avatar')}
           singleMode
           hideVideo
           readOnly={!fieldsEditable}
         />
-        <ControlField control={control} name="DisplayName" label="Display Name" editable={fieldsEditable} />
-        <ControlField control={control} name="FullName" label="Full Name" editable={fieldsEditable} />
-        <ControlField control={control} name="Phone" label="Phone" editable={fieldsEditable} />
-        <ControlField control={control} name="Email" label="Email" editable={fieldsEditable} />
+        <ControlField control={control} name="DisplayName" label={t('Display Name')} editable={fieldsEditable} />
+        <ControlField control={control} name="FullName" label={t('Full Name')} editable={fieldsEditable} />
+        <ControlField control={control} name="Phone" label={t('Phone')} editable={fieldsEditable} />
+        <ControlField control={control} name="Email" label={t('Email')} editable={fieldsEditable} />
         <SubmitButton onPress={() => onSubmit()} isSubmitting={isSubmitting} disabled={isLoading}>
-          <Text>Save</Text>
+          <Text>{t('Save')}</Text>
         </SubmitButton>
       </ScrollView>
     </KeyboardAvoidingView>

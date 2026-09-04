@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
-import { AppConfig } from '@/app.Impl/configs/app-config';
+import { APP_CONFIG } from '@/app.Impl/configs/app-config';
 import { useLoginMutation } from '@/app.Commons/userSession/userSessionApi';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -43,7 +43,7 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
   return (
     <View className="w-[360px] gap-4 rounded-lg border border-border bg-card p-8 shadow-sm">
       <View>
-        <Text className="text-lg font-bold text-primary">{AppConfig.APP_NAME || 'Console'}</Text>
+        <Text className="text-lg font-bold text-primary">{APP_CONFIG.APP_NAME || 'Console'}</Text>
         <Text className="text-sm text-muted-foreground">Development Console</Text>
       </View>
 
