@@ -2,9 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { uploadBinaryFile } from "./nativeUploadClient";
 import { GetIsAppActive, SubscribeIsAppActive } from "../app-state-context";
-import { StringUtils } from "@/app.Commons/helpers/string";
+import { StringUtils } from "@/client-side.Commons/helpers/string";
 import { InboundUploadedMediaDto } from "@/app.DataLayer/other/uploadedMediaDto";
-import { AuthToken, createStandaloneRefreshApi, notifyAuthLost, refreshAccessToken } from "@/app.Commons/dataLayer/apiSlice";
+import { AuthToken, createStandaloneRefreshApi, notifyAuthLost, refreshAccessToken } from "@/client-side.Commons/dataLayer/apiSlice";
 import { APP_URLS } from "@/app.Impl/configs/app-urls";
 
 

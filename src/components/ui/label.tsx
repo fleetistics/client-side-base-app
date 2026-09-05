@@ -1,6 +1,6 @@
 import * as LabelPrimitive from '@rn-primitives/label';
 import * as React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/uiColorScheme/utils';
 
 type LabelProps = LabelPrimitive.TextProps & {
   ref?: React.RefObject<LabelPrimitive.TextRef>;

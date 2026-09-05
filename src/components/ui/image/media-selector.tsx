@@ -8,7 +8,7 @@ import { FilterMediaHelper } from '@/components/ui/image/filter-medias-helper';
 import { OpenGallery, OpenPhoto, OpenVideo } from '@/components/ui/image/media-selector-helper';
 import { ViewUploadedMedias } from '@/components/ui/image/viewUploadedMedias';
 import type { UploadedMediaDto } from '@/app.DataLayer/other/uploadedMediaDto';
-import { MediaUploadService } from '@/app.Impl/services/media-uploader/mediaUploadService';
+import { MediaUploadService } from '@/app.Commons/services/media-uploader/mediaUploadService';
 
 export type MediaSelectorProps<TFieldValues extends FieldValues = FieldValues> = {
   control: Control<TFieldValues>;

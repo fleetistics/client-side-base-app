@@ -1,6 +1,6 @@
 import DeviceInfo from 'react-native-device-info';
 import { Platform } from "react-native";
-import { ClientSideInfo } from '@/app.Commons/userSession/userSessionDto';
+import { ClientSideInfo } from '@/client-side.Commons/userSession/userSessionDto';
 
 export class ClientSideInfoProvider {
     public static GetInstance(): ClientSideInfoProvider {

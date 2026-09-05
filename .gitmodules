@@ -1,4 +1,4 @@
-[submodule "src/app.Commons"]
-	path = src/app.Commons
+[submodule "src/client-side.Commons"]
+	path = src/client-side.Commons
 	url = https://github.com/fleetistics/client-side-react-commons.git
 	branch = main

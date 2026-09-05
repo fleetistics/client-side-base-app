@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react-native';
-import { makeStore } from '@/app.Commons/dataLayer/store';
+import { makeStore } from '@/client-side.Commons/dataLayer/store';
 
 export * from '@testing-library/react-native';
 

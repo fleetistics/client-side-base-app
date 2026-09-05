@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
 import { APP_CONFIG } from '@/app.Impl/configs/app-config';
-import { useLoginMutation } from '@/app.Commons/userSession/userSessionApi';
+import { useLoginMutation } from '@/client-side.Commons/userSession/userSessionApi';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';

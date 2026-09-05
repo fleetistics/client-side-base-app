@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { openSettings, PERMISSIONS, request, requestMultiple, RESULTS } from "react-native-permissions";
 import { MediaType, UploadedMediaDto } from "@/app.DataLayer/other/uploadedMediaDto";
 import { APP_CONFIG } from "@/app.Impl/configs/app-config";
-import { MediaUploadService } from "@/app.Impl/services/media-uploader/mediaUploadService";
+import { MediaUploadService } from "@/app.Commons/services/media-uploader/mediaUploadService";
 
 
 

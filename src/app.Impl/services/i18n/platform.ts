@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppState, type AppStateStatus } from 'react-native';
-import type { I18nPlatform } from '@/app.Commons/i18n/platform';
+import type { I18nPlatform } from '@/client-side.Commons/i18n/platform';
 
 /**
- * React Native backing for app.Commons/i18n: AsyncStorage for the persisted language,
+ * React Native backing for client-side.Commons/i18n: AsyncStorage for the persisted language,
  * AppState for foreground/background — RN's closest match for the web adapter's
  * visibilitychange/focus. There's no separate "window focus" concept on mobile, so
  * onForeground fires only on the active-state transition.

@@ -3259,6 +3259,7 @@ __metadata:
     react-native-screens: "npm:^4.27.0"
     react-native-splash-view: "npm:^0.0.21"
     react-native-svg: "npm:^15.15.5"
+    react-native-toast-message: "npm:^2.5.0"
     react-native-worklets: "npm:^0.12.1"
     react-redux: "npm:^9.3.0"
     react-test-renderer: "npm:19.2.3"
@@ -8899,6 +8900,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/d5ffbb55506a668cc93d34363720aa054e7dba415fc81b5f76d1fb21191d6e8b279a2eabf0238af4323c99c3c7699a4c493bc587c2d1d20ec0aa6c141070ba6b
+  languageName: node
+  linkType: hard
+
+"react-native-toast-message@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "react-native-toast-message@npm:2.5.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/20ada16bdf9ca312403d5eaab3f01440ef3777e10233f31c2aa1714a44fdb1c72fcac327cd3054b9ace11598b1b8c1ffabd54b92f318ffcebc8178a98b112171
   languageName: node
   linkType: hard
 

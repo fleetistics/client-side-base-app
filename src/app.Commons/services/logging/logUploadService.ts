@@ -1,7 +1,7 @@
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { gzip } from 'pako';
 
-import { AuthToken, createStandaloneRefreshApi, notifyAuthLost, refreshAccessToken } from '@/app.Commons/dataLayer/apiSlice';
+import { AuthToken, createStandaloneRefreshApi, notifyAuthLost, refreshAccessToken } from '@/client-side.Commons/dataLayer/apiSlice';
 import { APP_URLS } from '@/app.Impl/configs/app-urls';
 import { ClientSideInfoProvider } from '@/app.Impl/userSession/ClientSideInfoProvider';
 import { clearLogFiles, LOG_FILES_DIR, listLogFiles } from './logFileTransport';
@@ -27,7 +27,13 @@ const buildLogPack = async (): Promise<LogPack | null> => {
   return { fileName, gzipBytes };
 };
 
-const postReport = (userDescription: string, clientSideInfoJson: string, pack: LogPack | null, tempPath?: string) =>
+const postReport = (
+  userDescription: string,
+  clientSideInfoJson: string,
+  pack: LogPack | null,
+  tempPath?: string,
+  issueContext?: string
+) =>
   ReactNativeBlobUtil.fetch(
     'POST',
     APP_URLS.CLIENT_LOG_PACK_URL,
@@ -36,6 +42,7 @@ const postReport = (userDescription: string, clientSideInfoJson: string, pack: L
       { name: 'UserDescription', data: userDescription },
       { name: 'ClientSideInfo', data: clientSideInfoJson },
       { name: 'ClientSideDate', data: new Date().toString() },
+      { name: 'IssueContext', data: issueContext ?? '' },
       ...(pack && tempPath
         ? [
             {
@@ -58,7 +65,7 @@ const postReport = (userDescription: string, clientSideInfoJson: string, pack: L
  * Throws an Error describing the failure (auth expired, server rejection, etc.) instead
  * of returning a bare boolean, so callers can surface the actual reason to the user.
  */
-export const submitIssueReport = async (userDescription: string): Promise<void> => {
+export const submitIssueReport = async (userDescription: string, issueContext?: string): Promise<void> => {
   const pack = await buildLogPack();
   const clientSideInfoJson = JSON.stringify(await ClientSideInfoProvider.GetInstance().GetInfo());
   const tempPath = pack ? `${ReactNativeBlobUtil.fs.dirs.CacheDir}/${pack.fileName}` : undefined;
@@ -69,14 +76,14 @@ export const submitIssueReport = async (userDescription: string): Promise<void> 
   }
 
   try {
-    let response = await postReport(userDescription, clientSideInfoJson, pack, tempPath);
+    let response = await postReport(userDescription, clientSideInfoJson, pack, tempPath, issueContext);
     if (response.respInfo.status === 401) {
       const refreshed = await refreshAccessToken(createStandaloneRefreshApi('clientLogPack'), {});
       if (!refreshed) {
         notifyAuthLost();
         throw new Error('Your session has expired. Please sign in again.');
       }
-      response = await postReport(userDescription, clientSideInfoJson, pack, tempPath);
+      response = await postReport(userDescription, clientSideInfoJson, pack, tempPath, issueContext);
       if (response.respInfo.status === 401) {
         notifyAuthLost();
         throw new Error('Your session has expired. Please sign in again.');

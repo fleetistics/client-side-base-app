@@ -1,4 +1,4 @@
-import { apiSlice } from '@/app.Commons/dataLayer/apiSlice';
+import { apiSlice } from '@/client-side.Commons/dataLayer/apiSlice';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { User, UserPatch } from './userDto';

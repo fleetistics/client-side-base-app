@@ -1,8 +1,8 @@
-import { InitialPage } from '@/pages/core/InitialPage';
-import { RootPage } from '@/pages/core/RootPage';
-import { EditUserProfile } from '@/pages/core/EditUserProfile';
+import { InitialPage } from '@/pages/test/InitialPage';
+import { RootPage } from '@/pages/test/RootPage';
+import { EditUserProfile } from '@/pages/user/EditUserProfile';
 import { ReportIssuePage } from '@/pages/core/ReportIssuePage';
-import { CrashTestPage } from '@/pages/core/CrashTestPage';
+import { CrashTestPage } from '@/pages/test/CrashTestPage';
 import { MapPage } from '@/pages/map/MapPage';
 
 export type NavigatorPages = {
@@ -10,7 +10,7 @@ export type NavigatorPages = {
     InitialPage: undefined;
     RootPage: undefined;
     EditUserProfile: undefined;
-    ReportIssuePage: undefined;
+    ReportIssuePage: { issueContext?: string } | undefined;
     CrashTestPage: undefined;
     MainMap: { userId?: number } | undefined;
     TermsOfUse: { nextPageName?: string };

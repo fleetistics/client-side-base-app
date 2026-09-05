@@ -10,11 +10,11 @@ import { GetPatchValue } from '@/components/ui/form/get-patch-value';
 import { useGetMyUser, usePatchUser } from '@/app.DataLayer/user/userApi';
 import type { User, UserPatch } from '@/app.DataLayer/user/userDto';
 import { useRef } from 'react';
-import { BuildPatchValue, StartMediaUpload } from '@/app.Commons/helpers/form-helper';
+import { BuildPatchValue, StartMediaUpload } from '@/client-side.Commons/helpers/form-helper';
 
 
 export function EditUserProfile() {
-  // Sample usage of the shared i18n setup (see app.Commons/i18n): t()'s argument is the
+  // Sample usage of the shared i18n setup (see client-side.Commons/i18n): t()'s argument is the
   // English source string itself — the translations backend keys resources by that text,
   // not by a separate id — so it doubles as the untranslated fallback with zero setup.
   const { t } = useTranslation();

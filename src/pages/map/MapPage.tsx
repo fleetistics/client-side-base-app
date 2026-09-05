@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import MapView, { MapType, Region } from 'react-native-maps';
-import { useColorScheme } from '@/lib/useColorScheme';
-import { NAV_THEME } from '@/lib/constants';
-import { mapDarkModeStyle } from '@/uiLayout/dark-map-style';
+import { useColorScheme } from '@/uiColorScheme/useColorScheme';
+import { NAV_THEME } from '@/uiColorScheme/constants';
+import { mapDarkModeStyle } from '@/uiColorScheme/dark-map-style';
 
 const MAP_TYPE: MapType = 'hybrid';
 const MAP_ZOOMED_TYPE: MapType = 'satellite';

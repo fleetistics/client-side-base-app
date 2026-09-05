@@ -4,8 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { appPages, NavigatorPages } from './pages-config';
 import { navigationRef } from './navigation-ref';
-import { useColorScheme } from '@/lib/useColorScheme';
-import { NAV_THEME } from '@/lib/constants';
+import { useColorScheme } from '@/uiColorScheme/useColorScheme';
+import { NAV_THEME } from '@/uiColorScheme/constants';
+import Toast from 'react-native-toast-message';
+
+import { toastConfig } from '@/uiColorScheme/toast-config';
 
 const Stack = createNativeStackNavigator<NavigatorPages>();
 
@@ -14,7 +17,7 @@ export function MainRouter() {
     const previousRouteName = React.useRef<string | undefined>(undefined);
     const { colorScheme } = useColorScheme();
 
-    return (
+    return (<>
         <NavigationContainer
             theme={NAV_THEME[colorScheme]}
             ref={navigationRef}
@@ -40,5 +43,6 @@ export function MainRouter() {
                 </Stack.Navigator>
             </View>
         </NavigationContainer>
-    );
+        <Toast position='top' visibilityTime={2000} config={toastConfig} />
+    </>);
 }

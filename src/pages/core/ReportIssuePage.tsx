@@ -1,13 +1,17 @@
 import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { Alert as StatusAlert, AlertDescription } from '@/components/ui/alert';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { SubmitButton } from '@/components/ui/form/submit-button';
 import { Text } from '@/components/ui/text';
-import { submitIssueReport } from '@/app.Impl/services/logging/logUploadService';
+import { submitIssueReport } from '@/app.Commons/services/logging/logUploadService';
+import type { NavigatorPages } from '@/navigator/pages-config';
 
 export function ReportIssuePage() {
+  const route = useRoute<RouteProp<NavigatorPages, 'ReportIssuePage'>>();
+  const issueContext = route.params?.issueContext;
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState<'success' | 'error' | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
@@ -21,7 +25,7 @@ export function ReportIssuePage() {
     setStatus(undefined);
     setErrorMessage(undefined);
     try {
-      await submitIssueReport(description);
+      await submitIssueReport(description, issueContext);
       setStatus('success');
       setDescription('');
     } catch (err) {
@@ -42,6 +46,18 @@ export function ReportIssuePage() {
     >
       <ScrollView className="flex-1 bg-background" contentContainerClassName="gap-4 p-4">
         <Text className="text-lg font-medium">Report an Issue</Text>
+
+        {issueContext ? (
+          <View className="gap-1.5">
+            <Label nativeID="issueContextLabel">Details</Label>
+            <View
+              aria-labelledby="issueContextLabel"
+              className="rounded-md border border-input bg-muted px-3 py-2"
+            >
+              <Text className="text-sm text-muted-foreground">{issueContext}</Text>
+            </View>
+          </View>
+        ) : null}
 
         <View className="gap-1.5">
           <Label nativeID="issueDescription">Describe the issue</Label>

@@ -1,5 +1,4 @@
-
-const BASE_URL = "http://192.168.100.180:7225";
+import { BASE_URL } from "../../../server-side-base-url";
 
 export const APP_CONFIG = {
   APP_NAME: "Flt Proto App",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextInput } from 'react-native';
-import { cn } from '@/lib/utils';
+import { cn } from '@/uiColorScheme/utils';
 
 type InputProps = React.ComponentProps<typeof TextInput>;
 

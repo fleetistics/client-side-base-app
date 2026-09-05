@@ -2,7 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import { View } from 'react-native';
 import { Text, TextClassContext } from '@/components/ui/text';
-import { cn } from '@/lib/utils';
+import { cn } from '@/uiColorScheme/utils';
 
 const alertVariants = cva(
   'relative w-full rounded-lg border border-border bg-background p-4 shadow shadow-foreground/10',

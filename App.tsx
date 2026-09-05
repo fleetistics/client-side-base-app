@@ -8,19 +8,19 @@
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
-import { store } from './src/app.Commons/dataLayer/store';
-import { UserSessionProvider } from '@/app.Commons/userSession/userSessionProvider';
+import { store } from './src/client-side.Commons/dataLayer/store';
+import { UserSessionProvider } from '@/client-side.Commons/userSession/userSessionProvider';
 import { MainRouter } from '@/navigator/main-router';
-import { useColorScheme } from '@/lib/useColorScheme';
+import { useColorScheme } from '@/uiColorScheme/useColorScheme';
 import { useEffect } from 'react';
 import { hideSplash } from 'react-native-splash-view';
-import { InitAppStateListener } from '@/app.Impl/services/app-state-context';
-import { MediaUploadService } from '@/app.Impl/services/media-uploader/mediaUploadService';
-import { initLogger } from '@/app.Impl/services/logging/logger';
+import { InitAppStateListener } from '@/app.Commons/services/app-state-context';
+import { MediaUploadService } from '@/app.Commons/services/media-uploader/mediaUploadService';
+import { initLogger } from '@/app.Commons/services/logging/logger';
 import { AppErrorBoundary } from '@/app.Impl/initComponents/app-error-boundary';
-import { initI18n } from '@/app.Commons/i18n/i18n';
-import { useTranslationUpdater } from '@/app.Commons/i18n/translationUpdater';
-import { reactNativeI18nPlatform } from '@/app.Impl/i18n/platform';
+import { initI18n } from '@/client-side.Commons/i18n/i18n';
+import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpdater';
+import { reactNativeI18nPlatform } from '@/app.Impl/services/i18n/platform';
 
 
 function App() {
