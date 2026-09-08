@@ -5,7 +5,8 @@ export const APP_CONFIG = {
   BASE_URL,
   BASE_API_URL: BASE_URL + "/api/",
   InstandMediaUpload: true,
-  ReportLocationMode: false
+  ReportLocationMode: false,
+  BASE_TEAM_JOIN_LINK:"team://"
 };
 // export class AppConfig {
 

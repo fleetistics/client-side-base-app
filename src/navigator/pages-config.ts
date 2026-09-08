@@ -4,6 +4,7 @@ import { EditUserProfile } from '@/pages/user/EditUserProfile';
 import { ReportIssuePage } from '@/pages/core/ReportIssuePage';
 import { CrashTestPage } from '@/pages/test/CrashTestPage';
 import { MapPage } from '@/pages/map/MapPage';
+import { JoinTeamPage } from '@/pages/team/join-team';
 
 export type NavigatorPages = {
     TfTestingPage: undefined;
@@ -23,6 +24,7 @@ export type NavigatorPages = {
     //InitialSearchParty: undefined;
     UserActiveSearchPartyInfo: undefined;
     TeamPage: undefined;
+    JoinTeamPage: { joinKey?: string } | undefined;
     UpdatesPage: undefined;
     SettingsPage: undefined;
 }
@@ -51,12 +53,17 @@ const corePages: NavigatorItem[] = [
     {
         name: 'MainMap',
         component: MapPage
+    },
+    {
+        name: 'JoinTeamPage',
+        component: JoinTeamPage
     }
 ];
 
 
 export const screensLinks = {
-    JoinSearchParty: 'JoinSearchParty/:joinKey'
+    JoinSearchParty: 'JoinSearchParty/:joinKey',
+    JoinTeamPage: 'JoinTeamPage/:joinKey'
 };
 
 export const appPages: NavigatorItem[] = corePages;

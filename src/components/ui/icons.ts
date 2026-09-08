@@ -6,6 +6,7 @@ import {
   Eye,
   EyeOff,
   ImagePlus,
+  QrCode,
   Trash2,
   Video,
   X,
@@ -25,8 +26,8 @@ function iconWithClassName(icon: LucideIcon) {
   });
 }
 
-[Camera, Check, ChevronLeft, ChevronRight, Eye, EyeOff, ImagePlus, Trash2, Video, X].forEach(
+[Camera, Check, ChevronLeft, ChevronRight, Eye, EyeOff, ImagePlus, QrCode, Trash2, Video, X].forEach(
   iconWithClassName
 );
 
-export { Camera, Check, ChevronLeft, ChevronRight, Eye, EyeOff, ImagePlus, Trash2, Video, X };
+export { Camera, Check, ChevronLeft, ChevronRight, Eye, EyeOff, ImagePlus, QrCode, Trash2, Video, X };
