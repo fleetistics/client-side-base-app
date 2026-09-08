@@ -2,3 +2,7 @@
 	path = src/client-side.Commons
 	url = https://github.com/fleetistics/client-side-react-commons.git
 	branch = main
+[submodule "src/app.Commons"]
+	path = src/app.Commons
+	url = https://github.com/fleetistics/client-side-app-commons.git
+	branch = main
