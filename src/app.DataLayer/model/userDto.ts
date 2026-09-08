@@ -1,6 +1,6 @@
 import type { components } from '@/app.DataLayer/apiSchema';
 import type { Concrete } from '@/client-side.Commons/dataLayer/apiTypes';
-import type { InboundUploadedMediaDto, UploadedMediaDto } from '@/app.DataLayer/other/uploadedMediaDto';
+import type { InboundUploadedMediaDto, UploadedMediaDto } from '@/app.Commons/dataLayer/model/uploadedMediaDto';
 
 type UserDtoSchema = components['schemas']['UserDto'];
 
@@ -32,4 +32,18 @@ export type UserPatch = Pick<
   'DisplayName' | 'FullName' | 'Phone' | 'Email' | 'RemoveMediaIds'
 > & {
   InsertMedias?: InboundUploadedMediaDto[] | null;
+};
+
+// UserController returns 200 with both fields populated when a record exists, and 404
+// (not 200-with-empty-body) when the current user has none yet — see userApi.ts's
+// getUserLocationPrivacy, which turns that 404 into a `null` result rather than an error.
+export type UserLocationPrivacyDto = Concrete<
+  components['schemas']['UserLocationPrivacyDto'],
+  'PrivacyMode' | 'LatestUpdate'
+>;
+
+// The only field this PATCH accepts, so unlike UserPatch's partial-update fields, there's
+// no reason to leave it optional — every call is setting it.
+export type UserLocationPrivacyPatch = {
+  PrivacyMode: NonNullable<components['schemas']['UserLocationPrivacyPatchDto']['PrivacyMode']>;
 };

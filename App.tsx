@@ -21,6 +21,7 @@ import { AppErrorBoundary } from '@/app.Impl/initComponents/app-error-boundary';
 import { initI18n } from '@/client-side.Commons/i18n/i18n';
 import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpdater';
 import { reactNativeI18nPlatform } from '@/app.Impl/services/i18n/platform';
+import { LocationInitializer } from '@/components/init/location-initializer';
 
 
 function App() {
@@ -46,7 +47,9 @@ function App() {
         <SafeAreaProvider>
           <StatusBar barStyle={isDarkColorScheme ? 'light-content' : 'dark-content'} />
           <UserSessionProvider>
-            <MainRouter />
+            <LocationInitializer>
+              <MainRouter />
+            </LocationInitializer>
           </UserSessionProvider>
         </SafeAreaProvider>
       </Provider>

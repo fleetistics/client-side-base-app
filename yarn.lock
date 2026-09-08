@@ -1427,7 +1427,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.29.7":
+"@babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.29.7":
   version: 7.29.7
   resolution: "@babel/runtime@npm:7.29.7"
   checksum: 10/9883b4951787779fd382b121f22f92966d85f19434841f65fb00b2dfec232107e139683f47c6f252891826ad8ee18317b46c3a0e4819116a9885f47b46d7126a
@@ -2900,6 +2900,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@transistorsoft/background-geolocation-types@npm:^5.1.1, @transistorsoft/background-geolocation-types@npm:^5.2.2":
+  version: 5.3.2
+  resolution: "@transistorsoft/background-geolocation-types@npm:5.3.2"
+  checksum: 10/07e549b79c8b8e8839eb09a209edda58508d76a18df63ef0c06c51634aa3f2771098d5ee7974319805c1bf67cf9554d773370f8d7704ce15f0b2a89bff27da86
+  languageName: node
+  linkType: hard
+
 "@types/babel__core@npm:^7.1.14":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
@@ -3229,6 +3236,7 @@ __metadata:
     "@rn-primitives/label": "npm:^1.5.2"
     "@rn-primitives/slot": "npm:^1.5.2"
     "@testing-library/react-native": "npm:^13.2.3"
+    "@transistorsoft/background-geolocation-types": "npm:^5.1.1"
     "@types/jest": "npm:^29.5.13"
     "@types/react": "npm:^19.2.0"
     "@types/react-test-renderer": "npm:^19.1.0"
@@ -3247,6 +3255,7 @@ __metadata:
     react-hook-form: "npm:^7.86.0"
     react-i18next: "npm:^17.0.12"
     react-native: "npm:0.87.1"
+    react-native-background-geolocation: "npm:^5.1.1"
     react-native-blob-util: "npm:^0.24.10"
     react-native-device-info: "npm:^15.0.2"
     react-native-get-random-values: "npm:^2.0.0"
@@ -8729,6 +8738,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-background-geolocation@npm:^5.1.1":
+  version: 5.5.0
+  resolution: "react-native-background-geolocation@npm:5.5.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.26.0"
+    "@transistorsoft/background-geolocation-types": "npm:^5.2.2"
+    tslib: "npm:^2.6.3"
+  checksum: 10/607e6883a9019344ec7103c020b28f3d197996aea765b6c4cc832534fdb596822695743517fc548cf3dbeb497fc907d0902354564c2d67344cbc562d9106bf3a
+  languageName: node
+  linkType: hard
+
 "react-native-blob-util@npm:^0.24.10":
   version: 0.24.10
   resolution: "react-native-blob-util@npm:0.24.10"
@@ -10104,6 +10124,13 @@ __metadata:
   version: 0.1.13
   resolution: "ts-interface-checker@npm:0.1.13"
   checksum: 10/9f7346b9e25bade7a1050c001ec5a4f7023909c0e1644c5a96ae20703a131627f081479e6622a4ecee2177283d0069e651e507bedadd3904fc4010ab28ffce00
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.6.3":
+  version: 2.8.1
+  resolution: "tslib@npm:2.8.1"
+  checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
   languageName: node
   linkType: hard
 

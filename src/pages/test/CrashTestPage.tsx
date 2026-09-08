@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
+import { Button } from '@/app.Commons/controls/button';
+import { Text } from '@/app.Commons/controls/text';
 import { GlobalToast } from '@/app.Commons/utils/global-toast';
 import { GlobalAlert } from '@/app.Commons/utils/global-alert';
+import { useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/app.Commons/dataLayer/hooks/myUserApi';
 
 export function CrashTestPage() {
   const [shouldCrash, setShouldCrash] = useState(false);
+  const { data: isPrivacyModeOn, isLoading: isPrivacyModeLoading } = useGetUserPrivacyMode();
+  const [switchPrivacyMode, { isLoading: isSwitchingPrivacyMode }] = useSwitchUserPrivacyMode();
 
   // Thrown during render (not inside the onPress handler) so React's error boundary
   // actually catches it — a throw inside an event handler is not a React render error
@@ -23,6 +26,13 @@ export function CrashTestPage() {
       </Text>
       <Button variant="destructive" onPress={() => setShouldCrash(true)}>
         <Text>Throw unhandled exception</Text>
+      </Button>
+      <Text>PrivacyMode: {isPrivacyModeLoading ? 'loading...' : isPrivacyModeOn ? 'on' : 'off'}</Text>
+      <Button
+        disabled={isPrivacyModeLoading || isSwitchingPrivacyMode}
+        onPress={() => switchPrivacyMode(!isPrivacyModeOn)}
+      >
+        <Text>Switch Privacy Mode</Text>
       </Button>
       <Button onPress={() => GlobalToast.ShowError('This is a test error toast message')}>
         <Text>Show Error Toast</Text>

@@ -6,6 +6,11 @@ buildscript {
         targetSdkVersion = 36
         ndkVersion = "27.1.12297006"
         kotlinVersion = "2.2.0"
+
+        googlePlayServicesLocationVersion = "21.3.0"  // react-native-background-geolocation
+
+        slf4jVersion = "1.7.36"    // react-native-background-geolocation (logback-android logging)
+        logbackVersion = "2.0.1"   // react-native-background-geolocation (logback-android logging)
     }
     repositories {
         google()
@@ -15,6 +20,21 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    }
+}
+
+allprojects {   // react-native-background-geolocation
+    repositories {
+        google()
+        mavenCentral()
+    }
+    configurations.all {
+        // Keep SLF4J on 1.7.x so logback-android provides the expected binding at runtime
+        // (background-geolocation's native logger depends on logback-android, which some other
+        // dependency can otherwise pull in as SLF4J 2.x and break at runtime).
+        resolutionStrategy {
+            force "org.slf4j:slf4j-api:${rootProject.ext.slf4jVersion}"
+        }
     }
 }
 

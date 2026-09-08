@@ -205,6 +205,119 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/users/me/active-team-id": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": number;
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/me/location-privacy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserLocationPrivacyDto"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["UserLocationPrivacyPatchDto"];
+                    "text/json": components["schemas"]["UserLocationPrivacyPatchDto"];
+                    "application/*+json": components["schemas"]["UserLocationPrivacyPatchDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["UserLocationPrivacyDto"];
+                    };
+                };
+                /** @description Not Found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ProblemDetails"];
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
     "/api/languages/all": {
         parameters: {
             query?: never;
@@ -508,17 +621,16 @@ export interface paths {
                 content: {
                     "multipart/form-data": {
                         File?: components["schemas"]["IFormFile"];
-                        Name?: string;
+                        OriginalFileName?: string;
                         /** Format: uint8 */
                         MediaType?: number;
-                        Extension?: string;
                         Guid?: string;
                     };
                 };
             };
             responses: {
-                /** @description Created */
-                201: {
+                /** @description OK */
+                200: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -560,6 +672,51 @@ export interface paths {
                 cookie?: never;
             };
             requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/client-log-pack": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "multipart/form-data": {
+                        UserDescription?: string;
+                        IssueContext?: string;
+                        ClientSideInfo?: string;
+                        ClientSideDate?: string;
+                        File?: components["schemas"]["IFormFile"];
+                    };
+                };
+            };
             responses: {
                 /** @description OK */
                 200: {
@@ -981,6 +1138,16 @@ export interface components {
             Phone?: null | string;
             Email?: null | string;
             Medias?: null | components["schemas"]["UploadedMediaDto"][];
+        };
+        UserLocationPrivacyDto: {
+            /** Format: int16 */
+            PrivacyMode?: number;
+            /** Format: date-time */
+            LatestUpdate?: unknown;
+        };
+        UserLocationPrivacyPatchDto: {
+            /** Format: int16 */
+            PrivacyMode?: number;
         };
         UserPatchDto: {
             DisplayName?: string;

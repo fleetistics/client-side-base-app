@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { Alert as StatusAlert, AlertDescription } from '@/components/ui/alert';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { SubmitButton } from '@/components/ui/form/submit-button';
-import { Text } from '@/components/ui/text';
+import { Alert as StatusAlert, AlertDescription } from '@/app.Commons/controls/alert';
+import { Label } from '@/app.Commons/controls/label';
+import { Input } from '@/app.Commons/controls/input';
+import { SubmitButton } from '@/app.Commons/controls/form/submit-button';
+import { Text } from '@/app.Commons/controls/text';
 import { submitIssueReport } from '@/app.Commons/services/logging/logUploadService';
 import type { NavigatorPages } from '@/navigator/pages-config';
 

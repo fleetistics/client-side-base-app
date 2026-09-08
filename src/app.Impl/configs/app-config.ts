@@ -4,7 +4,8 @@ export const APP_CONFIG = {
   APP_NAME: "Flt Proto App",
   BASE_URL,
   BASE_API_URL: BASE_URL + "/api/",
-  InstandMediaUpload: true
+  InstandMediaUpload: true,
+  ReportLocationMode: false
 };
 // export class AppConfig {
 

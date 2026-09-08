@@ -13,10 +13,16 @@ node_require('react-native-permissions/scripts/setup.rb')
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# react-native-background-geolocation ships a static_framework pod with mixed Swift/ObjC headers.
+use_modular_headers!
+
 setup_permissions([
   'Camera',
   'Microphone',
   'PhotoLibrary',
+  'LocationAccuracy',
+  'LocationAlways',
+  'LocationWhenInUse',
 ])
 
 linkage = ENV['USE_FRAMEWORKS']

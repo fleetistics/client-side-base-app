@@ -2,6 +2,12 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+// react-native-background-geolocation: not fully wired by autolinking alone — this pulls in
+// the plugin's own app.gradle, which strips its ~1.5M of debug sound-fx resources from release
+// builds. Must come after the RN gradle plugin is applied.
+Project background_geolocation = project(':react-native-background-geolocation')
+apply from: "${background_geolocation.projectDir}/app.gradle"
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -91,7 +97,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [MAPS_API_KEY: secretsProps.getProperty("MAPS_API_KEY", "")]
+        manifestPlaceholders = [
+            MAPS_API_KEY: secretsProps.getProperty("MAPS_API_KEY", ""),
+            BG_GEO_LICENSE_ANDROID: secretsProps.getProperty("BG_GEO_LICENSE_ANDROID", "")
+        ]
     }
     signingConfigs {
         debug {
