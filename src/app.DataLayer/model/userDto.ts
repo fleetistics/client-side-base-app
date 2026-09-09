@@ -1,5 +1,5 @@
 import type { components } from '@/app.DataLayer/apiSchema';
-import type { Concrete } from '@/client-side.Commons/dataLayer/apiTypes';
+import type { Concrete } from '@/client-side.Commons/dataLayer/core/apiTypes';
 import type { InboundUploadedMediaDto, UploadedMediaDto } from '@/app.Commons/dataLayer/model/uploadedMediaDto';
 
 type UserDtoSchema = components['schemas']['UserDto'];

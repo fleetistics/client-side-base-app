@@ -17,6 +17,7 @@ export class ClientSideInfoProvider {
             AppVersion: DeviceInfo.getVersion() + ' ' + (Platform.OS == 'ios' ? 'i-' : 'a-') + DeviceInfo.getBuildNumber(),
             CodeVersion:"1.0.0",
             PlatformName: Platform.OS,
+            PlatformId: Platform.OS == 'ios' ? 1 : 2,
             FCMToken: this.mNotificationToken??""
 
         }

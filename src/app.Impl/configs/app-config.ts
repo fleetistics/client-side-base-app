@@ -6,7 +6,10 @@ export const APP_CONFIG = {
   BASE_API_URL: BASE_URL + "/api/",
   InstandMediaUpload: true,
   ReportLocationMode: false,
-  BASE_TEAM_JOIN_LINK:"team://"
+  BASE_TEAM_JOIN_LINK:"team://",
+  // Fixed IDs assigned by the backend for this app/platform build — must match
+  // the values registered server-side. Not derived at runtime.
+  ClientAppId: 1
 };
 // export class AppConfig {
 

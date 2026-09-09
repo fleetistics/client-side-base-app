@@ -8,7 +8,7 @@
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
-import { store } from './src/client-side.Commons/dataLayer/store';
+import { store } from './src/client-side.Commons/dataLayer/core/store';
 import { UserSessionProvider } from '@/client-side.Commons/userSession/userSessionProvider';
 import { MainRouter } from '@/navigator/main-router';
 import { useColorScheme } from '@/uiColorScheme/useColorScheme';

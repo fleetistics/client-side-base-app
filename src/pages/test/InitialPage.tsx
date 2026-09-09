@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Text } from '@/app.Commons/controls/text';
+import { Text } from '@/app.Commons/components/controls/text';
 
 export function InitialPage() {
   return (

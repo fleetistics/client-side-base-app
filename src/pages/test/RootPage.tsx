@@ -1,8 +1,8 @@
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Text } from '@/app.Commons/controls/text';
-import { Button } from '@/app.Commons/controls/button';
+import { Text } from '@/app.Commons/components/controls/text';
+import { Button } from '@/app.Commons/components/controls/button';
 import type { NavigatorPages } from '@/navigator/pages-config';
 
 export function RootPage() {

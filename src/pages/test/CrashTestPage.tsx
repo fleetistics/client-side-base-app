@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { Button } from '@/app.Commons/controls/button';
-import { Text } from '@/app.Commons/controls/text';
+import { Button } from '@/app.Commons/components/controls/button';
+import { Text } from '@/app.Commons/components/controls/text';
 import { GlobalToast } from '@/app.Commons/utils/global-toast';
 import { GlobalAlert } from '@/app.Commons/utils/global-alert';
-import { useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/app.Commons/dataLayer/hooks/myUserApi';
+import { useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/app.Commons/dataLayer/api/myUserApi';
 
 export function CrashTestPage() {
   const [shouldCrash, setShouldCrash] = useState(false);

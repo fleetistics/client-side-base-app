@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { LocationProvider } from '@/app.Commons/services/location/location-provider';
 import { LocationService } from '@/app.Commons/services/location/locationService';
 import { InitWaiter } from '../../app.Impl/initComponents/init-waiter';
-import { useLoadActiveTeamId, useLoadUserLocationPrivacy } from '@/app.Commons/dataLayer/hooks/myUserApi';
+import { useLoadActiveTeamId, useLoadUserLocationPrivacy } from '@/app.Commons/dataLayer/api/myUserApi';
 
 // App-specific wrapper around the reusable LocationProvider base: LocationProvider only does
 // the BackgroundGeolocation wiring and never blocks rendering, so this is where an app decides
