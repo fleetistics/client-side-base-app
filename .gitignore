@@ -1,4 +1,10 @@
 server-side-base-url.ts
+
+# Detox e2e
+e2e/artifacts/
+e2e_logcat.txt
+/artifacts/
+
 # OSX
 #
 .DS_Store

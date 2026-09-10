@@ -1,5 +1,7 @@
 module.exports = {
   preset: '@react-native/jest-preset',
+  // e2e/ has its own jest.config.js (Detox's node-side test runner, not RN component tests).
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/e2e/'],
   moduleNameMapper: {
     '^react-native-device-info$': '<rootDir>/node_modules/react-native-device-info/jest/react-native-device-info-mock.js',
   },

@@ -17,17 +17,29 @@ import { hideSplash } from 'react-native-splash-view';
 import { InitAppStateListener } from '@/app.Commons/services/app-state-context';
 import { MediaUploadService } from '@/app.Commons/services/media-uploader/mediaUploadService';
 import { initLogger } from '@/app.Commons/services/logging/logger';
+import { initCrashReporting } from '@/app.Commons/services/crashReporting/crashReporting';
 import { AppErrorBoundary } from '@/app.Impl/initComponents/app-error-boundary';
 import { initI18n } from '@/client-side.Commons/i18n/i18n';
 import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpdater';
 import { reactNativeI18nPlatform } from '@/app.Impl/services/i18n/platform';
 import { LocationInitializer } from '@/components/init/location-initializer';
+import { User } from 'lucide-react-native';
+import { UserSettingsProvider } from '@/client-side.Commons/components/init/user-settings-provider';
+import { setE2EMode, isE2EMode } from '@/app.Impl/testSupport/e2e-mode';
+import { E2EMockLocation } from '@/app.Impl/testSupport/e2e-mock-location';
 
+type AppProps = {
+  // Only ever set by Detox's launchArgs, forwarded as initialProps via MainActivity.kt's
+  // getLaunchOptions() override — absent (undefined) in every real launch.
+  e2eMockMap?: string;
+};
 
-function App() {
+function App({ e2eMockMap }: AppProps) {
+  setE2EMode(e2eMockMap === 'true');
   const { isDarkColorScheme } = useColorScheme();
   useEffect(() => {
     initLogger();
+    void initCrashReporting();
     console.log('Start App');
     InitAppStateListener();
     MediaUploadService.Create();
@@ -44,12 +56,15 @@ function App() {
   return (
     <AppErrorBoundary>
       <Provider store={store}>
+        {isE2EMode() && <E2EMockLocation />}
         <SafeAreaProvider>
           <StatusBar barStyle={isDarkColorScheme ? 'light-content' : 'dark-content'} />
-          <UserSessionProvider>
-            <LocationInitializer>
-              <MainRouter />
-            </LocationInitializer>
+          <UserSessionProvider mockSession={isE2EMode() ? { UserId: -1, SessionId: -1, PlatformId: 1 } : undefined}>
+            <UserSettingsProvider skipBlocking={isE2EMode()}>
+              <LocationInitializer>
+                <MainRouter />
+              </LocationInitializer>
+            </UserSettingsProvider>
           </UserSessionProvider>
         </SafeAreaProvider>
       </Provider>

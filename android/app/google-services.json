@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "519077466511",
+    "project_id": "mf-fleet-tracking-app",
+    "storage_bucket": "mf-fleet-tracking-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519077466511:android:4453935c53d261f889fbfa",
+        "android_client_info": {
+          "package_name": "com.pubsafe.baseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519077466511-mtfiaemvncmfi6bg5mia2kkkk4g0tpd7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnufyrsi3P0mIHjnueqTnag7hg18bdtOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519077466511-mtfiaemvncmfi6bg5mia2kkkk4g0tpd7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "519077466511-e76hbat11p1io6f8hsbhmb5p1e03g46e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pubsafe.baseapp",
+                "app_store_id": "1662368813"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

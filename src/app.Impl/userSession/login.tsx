@@ -57,6 +57,7 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
           rules={{ required: true }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              testID="login-username-input"
               autoComplete="username"
               value={value}
               onChangeText={onChange}
@@ -75,6 +76,7 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
+                testID="login-password-input"
                 secureTextEntry={!showPassword}
                 autoComplete="current-password"
                 className="pr-9"
@@ -120,7 +122,7 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
         </Alert>
       )}
 
-      <Button onPress={() => onSubmit()} className="w-full" disabled={loginState.isLoading}>
+      <Button testID="login-submit-button" onPress={() => onSubmit()} className="w-full" disabled={loginState.isLoading}>
         <Text>{loginState.isLoading ? 'Signing in…' : 'Sign in'}</Text>
       </Button>
     </View>

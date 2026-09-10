@@ -1,4 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { getApp } from '@react-native-firebase/app';
+import { getCrashlytics, recordError } from '@react-native-firebase/crashlytics';
 import { InitError } from './init-error';
 import { ReportIssuePage } from '@/pages/core/ReportIssuePage';
 
@@ -39,6 +41,10 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
       'Component stack:',
       errorInfo.componentStack ?? 'no component stack'
     );
+    // Errors caught here never reach crashReporting.ts's global ErrorUtils handler — that's the
+    // point of an error boundary, it stops propagation instead of letting the error go fatal —
+    // so this is the one JS error path that has to call Crashlytics directly.
+    recordError(getCrashlytics(getApp()), error);
     this.setState({ errorInfo });
   }
 

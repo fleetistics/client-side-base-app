@@ -9,10 +9,14 @@
     "postinstall": "patch-package",
     "start": "react-native start",
     "test": "jest",
-    "generate:api": "yarn dlx -q -p typescript@^5.9.2 -p openapi-typescript@^7 openapi-typescript http://192.168.100.180:7225/openapi/v1.json -o src/app.DataLayer/apiSchema.d.ts"
+    "generate:api": "yarn dlx -q -p typescript@^5.9.2 -p openapi-typescript@^7 openapi-typescript http://192.168.100.180:7225/openapi/v1.json -o src/app.DataLayer/apiSchema.d.ts",
+    "e2e:build:android": "detox build -c android.att.debug",
+    "e2e:test:android": "detox test -c android.att.debug"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^3.1.1",
+    "@react-native-firebase/app": "^26.4.0",
+    "@react-native-firebase/crashlytics": "^26.4.0",
     "@react-native/new-app-screen": "0.87.1",
     "@react-navigation/native": "^7.3.17",
     "@react-navigation/native-stack": "^7.18.9",
@@ -66,12 +70,16 @@
     "@testing-library/react-native": "^13.2.3",
     "@transistorsoft/background-geolocation-types": "^5.1.1",
     "@types/jest": "^29.5.13",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
     "babel-plugin-module-resolver": "^5.0.3",
+    "detox": "^20.51.4",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "patch-package": "^8.0.1",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
     "prettier": "2.8.8",
     "react-test-renderer": "19.2.3",
     "typescript": "^6.0.3"

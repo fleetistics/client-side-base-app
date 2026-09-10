@@ -20,6 +20,8 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.4")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:3.0.8")
     }
 }
 
@@ -27,6 +29,10 @@ allprojects {   // react-native-background-geolocation
     repositories {
         google()
         mavenCentral()
+        // Detox (see e2e/, .detoxrc.js): its Android library isn't published to Maven Central
+        // (only long-abandoned 0.x releases are) — the npm package ships the current version's
+        // AAR as a ready-made local Maven repo instead.
+        maven { url("$rootDir/../node_modules/detox/Detox-android") }
     }
     configurations.all {
         // Keep SLF4J on 1.7.x so logback-android provides the expected binding at runtime

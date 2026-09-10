@@ -1,6 +1,10 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+// Firebase: google-services reads android/app/google-services.json to configure FirebaseApp;
+// firebase-crashlytics must be applied after it so it can hook into the same config.
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.google.firebase.crashlytics"
 
 // react-native-background-geolocation: not fully wired by autolinking alone — this pulls in
 // the plugin's own app.gradle, which strips its ~1.5M of debug sound-fx resources from release
@@ -101,7 +105,11 @@ android {
             MAPS_API_KEY: secretsProps.getProperty("MAPS_API_KEY", ""),
             BG_GEO_LICENSE_ANDROID: secretsProps.getProperty("BG_GEO_LICENSE_ANDROID", "")
         ]
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    // Detox (see e2e/, .detoxrc.js): which buildType's androidTest APK to run against. Overridden
+    // by `./gradlew ... -DtestBuildType=<type>`, as .detoxrc.js's android.debug app config does.
+    testBuildType System.getProperty('testBuildType', 'debug')
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -133,4 +141,10 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Detox (see e2e/, .detoxrc.js) — version must match the `detox` npm package (package.json).
+    androidTestImplementation('com.wix:detox:20.51.4')
+    androidTestImplementation('androidx.test:runner:1.6.2')
+    androidTestImplementation('androidx.test:rules:1.6.1')
+    androidTestImplementation('androidx.test.ext:junit:1.2.1')
 }

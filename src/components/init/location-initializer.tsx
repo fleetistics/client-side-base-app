@@ -13,6 +13,7 @@ export function LocationInitializer(props: { children: React.ReactNode }) {
     const [loadUserPrivacy, { data: userPrivacy, error: privacyError, isLoading: isPrivacyLoading, isSuccess: isPrivacyLoaded }] = useLoadUserLocationPrivacy();
     const [loadActiveTeamId, { data: activeTeamId, error: teamIdError, isLoading: isTeamIdLoading, isSuccess: isTeamIdLoaded }] = useLoadActiveTeamId();
 
+    console.log(`[LocationInitializer] isLocationStarted=${isLocationStarted}, isPrivacyLoading=${isPrivacyLoading}, isTeamIdLoading=${isTeamIdLoading}, isPrivacyLoaded=${isPrivacyLoaded}, isTeamIdLoaded=${isTeamIdLoaded}, privacyError=${privacyError}, teamIdError=${teamIdError}, userPrivacy=${JSON.stringify(userPrivacy)}, activeTeamId=${activeTeamId}`);
     useEffect(() => {
         loadUserPrivacy();
         loadActiveTeamId();
