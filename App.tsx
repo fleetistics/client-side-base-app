@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { hideSplash } from 'react-native-splash-view';
 import { InitAppStateListener } from '@/app.Commons/services/app-state-context';
 import { MediaUploadService } from '@/app.Commons/services/media-uploader/mediaUploadService';
+import { TeamContextService } from '@/app.Commons/services/team/teamContextService';
 import { initLogger } from '@/app.Commons/services/logging/logger';
 import { initCrashReporting } from '@/app.Commons/services/crashReporting/crashReporting';
 import { AppErrorBoundary } from '@/app.Impl/initComponents/app-error-boundary';
@@ -43,6 +44,7 @@ function App({ e2eMockMap }: AppProps) {
     console.log('Start App');
     InitAppStateListener();
     MediaUploadService.Create();
+    TeamContextService.Create();
     void initI18n(reactNativeI18nPlatform, { testMode: true });
     setTimeout(() => {
       hideSplash();

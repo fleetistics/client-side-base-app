@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/client-side.Commons/dataLayer/core/hooks';
-import { locationAcquired } from '@/app.Commons/dataLayer/api/locationApi';
+import { locationAcquired } from '@/app.Commons/dataLayer/api/other/locationApi';
 import { E2E_MOCK_LOCATION } from '@/app.Impl/testSupport/e2e-mode';
 
 // Rendered only under Detox (see App.tsx / isE2EMode()). Real GPS fixes are unreliable/slow on a

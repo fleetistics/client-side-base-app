@@ -7,10 +7,13 @@ import { ControlField } from '@/app.Commons/components/form/control-field';
 import { SubmitButton } from '@/app.Commons/components/form/submit-button';
 import { MediaSelector } from '@/app.Commons/components/image/media-selector';
 import { GetPatchValue } from '@/app.Commons/components/form/get-patch-value';
-import { useGetMyUser, usePatchUser } from '@/app.Commons/dataLayer/api/myUserApi';
-import type { User, UserPatch } from '@/app.DataLayer/model/userDto';
+import { useGetMyUser, usePatchUser } from '@/app.Commons/dataLayer/api/user/myUserApi';
+import type { User, UserPatch } from '@/app.Commons/dataLayer/model/user/userDto';
 import { useRef } from 'react';
-import { BuildPatchValue, StartMediaUpload } from '@/client-side.Commons/helpers/form-helper';
+import { BuildFormPatchValue } from '@/client-side.Commons/helpers/form-helper';
+import { EditUser, EditUserGroupKey } from '@/app.Commons/dataLayer/model/user/edit-user';
+import { EditorUploadedMedia } from '@/client-side.Commons/dataLayer/model/uploaded-media';
+import { StartMediaUpload } from '@/app.Commons/services/media-uploader/mediaUploadService';
 
 
 export function EditUserProfile() {
@@ -27,7 +30,7 @@ export function EditUserProfile() {
     handleSubmit,
     reset,
     formState: { dirtyFields, isSubmitting },
-  } = useForm<User>({
+  } = useForm<EditUser>({
     defaultValues: { },
   });
 
@@ -35,7 +38,17 @@ export function EditUserProfile() {
 
   React.useEffect(() => {
     if (currentEntity) {
-      reset(currentEntity);
+      let userToEdit = currentEntity as EditUser;
+      userToEdit.Medias = [];
+      if ( userToEdit.AvatarImage ) {
+        userToEdit.AvatarImage.GroupKey = EditUserGroupKey.Avatar;
+        userToEdit.Medias.push(userToEdit.AvatarImage as EditorUploadedMedia);
+      }
+      if ( userToEdit.GovIDImage ) {
+        userToEdit.GovIDImage.GroupKey = EditUserGroupKey.GovID;
+        userToEdit.Medias.push(userToEdit.GovIDImage as EditorUploadedMedia);
+      }
+      reset(userToEdit);
     }
   }, [currentEntity, reset]);
 
@@ -44,7 +57,7 @@ export function EditUserProfile() {
     isSubmittingRef.current = true;
     try {
       console.log(`EditUserProfile::onSubmit values, dirtyFields`, values, dirtyFields);
-      const patch = BuildPatchValue<UserPatch>(values, dirtyFields);
+      const patch = BuildFormPatchValue<UserPatch>(values, dirtyFields);
       console.log(`EditUserProfile::onSubmit patch`, patch);
       if (patch) {
         await patchUser({ userId: currentEntity.Id, patch }).unwrap();

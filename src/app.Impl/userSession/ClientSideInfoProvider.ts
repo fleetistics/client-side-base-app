@@ -18,7 +18,7 @@ export class ClientSideInfoProvider {
             CodeVersion:"1.0.0",
             PlatformName: Platform.OS,
             PlatformId: Platform.OS == 'ios' ? 1 : 2,
-            FCMToken: this.mNotificationToken??""
+            FCM_FID: this.mNotificationToken??""
 
         }
     }

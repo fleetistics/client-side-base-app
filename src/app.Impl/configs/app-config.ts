@@ -7,6 +7,9 @@ export const APP_CONFIG = {
   InstandMediaUpload: true,
   ReportLocationMode: false,
   BASE_TEAM_JOIN_LINK:"team://",
+  // How often TeamContextService polls GET .../context/delta while a team is active
+  // and the app is foregrounded.
+  TeamContextUpdatePeriodMs: 15000,
   // Fixed IDs assigned by the backend for this app/platform build — must match
   // the values registered server-side. Not derived at runtime.
   ClientAppId: 1
