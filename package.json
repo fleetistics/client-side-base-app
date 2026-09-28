@@ -9,8 +9,8 @@
     "postinstall": "patch-package",
     "start": "react-native start",
     "test": "jest",
-    "generate:api": "yarn dlx -q -p typescript@^5.9.2 -p openapi-typescript@^7 openapi-typescript http://192.168.100.180:7225/openapi/v1.json -o src/app.Commons/dataLayer/apiSchema.d.ts",
-    "generate:api:codegen": "openapi --input http://192.168.100.180:7225/openapi/v1.json --output src/app.Commons/dataLayer/open-api --client fetch",
+    "generate:api": "node scripts/generate-api.js",
+    "generate:api:codegen": "node scripts/generate-api-codegen.js",
     "e2e:build:android": "detox build -c android.att.debug",
     "e2e:test:android": "detox test -c android.att.debug"
   },
