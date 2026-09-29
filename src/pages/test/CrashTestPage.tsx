@@ -9,7 +9,7 @@ import { useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/app.Commons/d
 export function CrashTestPage() {
   const [shouldCrash, setShouldCrash] = useState(false);
   const { data: isPrivacyModeOn, isLoading: isPrivacyModeLoading } = useGetUserPrivacyMode();
-  const [switchPrivacyMode, { isLoading: isSwitchingPrivacyMode }] = useSwitchUserPrivacyMode();
+  const [, privacySync, togglePrivacyMode] = useSwitchUserPrivacyMode();
 
   // Thrown during render (not inside the onPress handler) so React's error boundary
   // actually catches it — a throw inside an event handler is not a React render error
@@ -28,9 +28,13 @@ export function CrashTestPage() {
         <Text>Throw unhandled exception</Text>
       </Button>
       <Text>PrivacyMode: {isPrivacyModeLoading ? 'loading...' : isPrivacyModeOn ? 'on' : 'off'}</Text>
+      <Text testID="privacy-sync-state">
+        Sync: {privacySync.failed ? `failed (${privacySync.failed.lastError})` : privacySync.isSending ? 'sending...' : privacySync.isPending ? 'pending' : 'synced'}
+      </Text>
       <Button
-        disabled={isPrivacyModeLoading || isSwitchingPrivacyMode}
-        onPress={() => switchPrivacyMode(!isPrivacyModeOn)}
+        // No need to block while a change is queued: repeated switches coalesce to the latest value.
+        disabled={isPrivacyModeLoading}
+        onPress={() => togglePrivacyMode()}
       >
         <Text>Switch Privacy Mode</Text>
       </Button>

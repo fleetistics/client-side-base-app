@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LocationProvider } from '@/app.Commons/services/location/location-provider';
 import { LocationService } from '@/app.Commons/services/location/locationService';
 import { InitWaiter } from '../../app.Impl/initComponents/init-waiter';
-import { useLoadActiveTeamId, useLoadUserLocationPrivacy } from '@/app.Commons/dataLayer/api/user/myUserApi';
+import { useCachedPrivacyMode, useLoadActiveTeamId, useLoadUserLocationPrivacy, usePendingPrivacyMode } from '@/app.Commons/dataLayer/api/user/myUserApi';
+import { useOutboxHydrated } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
 
 // App-specific wrapper around the reusable LocationProvider base: LocationProvider only does
 // the BackgroundGeolocation wiring and never blocks rendering, so this is where an app decides
@@ -12,6 +13,19 @@ export function LocationInitializer(props: { children: React.ReactNode }) {
     const [isLocationStarted, setIsLocationStarted] = useState(false);
     const [loadUserPrivacy, { data: userPrivacy, error: privacyError, isLoading: isPrivacyLoading, isSuccess: isPrivacyLoaded }] = useLoadUserLocationPrivacy();
     const [loadActiveTeamId, { data: activeTeamId, error: teamIdError, isLoading: isTeamIdLoading, isSuccess: isTeamIdLoaded }] = useLoadActiveTeamId();
+    // Privacy is offline-first: a choice the server hasn't confirmed yet (queued before an
+    // app restart, say) must win over the server's older value, or the app would start
+    // reporting location for a user who went private offline. The cache already has pending
+    // changes applied; the pending value covers the case where it isn't loaded.
+    const isOutboxHydrated = useOutboxHydrated();
+    const pendingPrivacyMode = usePendingPrivacyMode();
+    const cachedPrivacyMode = useCachedPrivacyMode();
+    const isPrivate = pendingPrivacyMode ?? cachedPrivacyMode ?? (((userPrivacy?.PrivacyMode) ?? 0) > 0);
+    // Read through a ref: this effect applies the startup value only (plus a re-apply once location
+    // has started). Later switches go through useSwitchUserPrivacyMode, which sets LocationService
+    // itself - re-running on them would also re-assert report mode below.
+    const isPrivateRef = useRef(isPrivate);
+    isPrivateRef.current = isPrivate;
 
     console.log(`[LocationInitializer] isLocationStarted=${isLocationStarted}, isPrivacyLoading=${isPrivacyLoading}, isTeamIdLoading=${isTeamIdLoading}, isPrivacyLoaded=${isPrivacyLoaded}, isTeamIdLoaded=${isTeamIdLoaded}, privacyError=${privacyError}, teamIdError=${teamIdError}, userPrivacy=${JSON.stringify(userPrivacy)}, activeTeamId=${activeTeamId}`);
     useEffect(() => {
@@ -27,15 +41,15 @@ export function LocationInitializer(props: { children: React.ReactNode }) {
             setIsLocationInitialized(true);
             return;
         }
-        if (!isPrivacyLoaded || !isTeamIdLoaded) return;
+        if (!isPrivacyLoaded || !isTeamIdLoaded || !isOutboxHydrated) return;
         if (activeTeamId) {
-            LocationService.SetBothPrivateMode_ReportLocationMode(((userPrivacy?.PrivacyMode) ?? 0) > 0, true);
+            LocationService.SetBothPrivateMode_ReportLocationMode(isPrivateRef.current, true);
         }
         else {
-            LocationService.SetPrivateMode(((userPrivacy?.PrivacyMode) ?? 0) > 0);
+            LocationService.SetPrivateMode(isPrivateRef.current);
         }
         setIsLocationInitialized(true);
-    }, [isLocationStarted, userPrivacy, activeTeamId, privacyError, teamIdError, isPrivacyLoading, isTeamIdLoading, isPrivacyLoaded, isTeamIdLoaded]);
+    }, [isLocationStarted, activeTeamId, privacyError, teamIdError, isPrivacyLoading, isTeamIdLoading, isPrivacyLoaded, isTeamIdLoaded, isOutboxHydrated]);
 
     return (
         <LocationProvider setIsLocationStarted={setIsLocationStarted}>

@@ -34,7 +34,9 @@ export function MapPage() {
     const mapZoomedType = useGetStringAppSettings(AppCommonUserSettingsEnum.mapZoomedType, 'satellite').data as MapType;
 
       const { data: isPrivacyModeOn } = useGetUserPrivacyMode();
-      const [switchPrivacyMode] = useSwitchUserPrivacyMode();
+      const [, privacySync, togglePrivacyMode] = useSwitchUserPrivacyMode();
+      // Offline-first: the mode is already in effect on this device; this only says whether the server has it.
+      const privacySyncSuffix = privacySync.failed ? ' (not saved)' : privacySync.isPending ? ' (syncing)' : '';
     
     return (
         <View className="flex-1 bg-background">
@@ -42,9 +44,9 @@ export function MapPage() {
                 testID="toggle-privacy"
                 className="absolute top-4 right-4 z-10"
                 variant={isPrivacyModeOn ? 'destructive' : 'secondary'}
-                onPress={() => switchPrivacyMode(!isPrivacyModeOn)}
+                onPress={() => togglePrivacyMode()}
             >
-                <Text>{isPrivacyModeOn ? 'Privacy: On' : 'Privacy: Off'}</Text>
+                <Text>{(isPrivacyModeOn ? 'Privacy: On' : 'Privacy: Off') + privacySyncSuffix}</Text>
             </Button>
             <Button
                 testID="toggle-triangle"
