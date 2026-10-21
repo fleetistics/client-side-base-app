@@ -22,7 +22,7 @@ function saveArtifact(srcPath: string, name: string): string {
 //
 // e2eMockMap:'true' also short-circuits auth (App.tsx passes a synthetic session into
 // UserSessionProvider/UserSettingsProvider — see src/app.Impl/testSupport/e2e-mode.ts) since the
-// real login screen (src/app.Impl/userSession/login.tsx) has no test bypass of its own and this
+// real login screen (src/client-side.Impl/userSession/login.tsx) has no test bypass of its own and this
 // suite has no way to obtain real backend credentials.
 
 // Marker toggles animate/settle over a couple of frames (see the two-rAF-deferred redraw() in

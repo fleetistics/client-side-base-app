@@ -8,21 +8,32 @@ import { useLatestGPSLocation } from '@/app.Commons/dataLayer/api/other/location
 import { useGetStringAppSettings } from '@/client-side.Commons/dataLayer/api/appSettingsApi';
 import { AppCommonUserSettingsEnum } from '@/app.Commons/configs/app-user-settings-enums';
 import { MapUtils } from '@/app.Commons/helpers/map-utils';
-import { useGetMyUser, useGetMyUserQuery, useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/app.Commons/dataLayer/api/user/myUserApi';
+import { useGetMyUser, useGetMyUserQuery, useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
 import { UserMapMarker } from '@/app.Commons/components/map/user-map-marker';
 import { UserMapMarkerPopupInfo } from '@/app.Commons/components/map/marker-popup-info';
 import { Button } from '@/app.Commons/components/controls/button';
 import { Text } from '@/app.Commons/components/controls/text';
-import { isE2EMode, E2E_MOCK_LOCATION } from '@/app.Impl/testSupport/e2e-mode';
+import { isE2EMode, E2E_MOCK_LOCATION } from '@/app.Commons/testSupport/e2e-mode';
+import { TeamMapItem  } from '@/app.Commons/services/team/team-context';
+import { UserDto } from '@/client-side.Commons/dataLayer/open-api/models/UserDto';
+import { useTeamMapItems } from '@/app.Commons/services/team/teamContextService';
 
+type MarkerPopupInfo = {
+    mapItem?: TeamMapItem;
+    user?: UserDto;
+    isCurUser?: boolean;
+};
 
 export function MapPage() {
     const { colorScheme, isDarkColorScheme } = useColorScheme();
     const latestLocation = useLatestGPSLocation();
     const { data: myUserData } = useGetMyUser();
     const mapRef = useRef<MapView>(null);
+
     const markerRefs = useRef<Map<number, MapMarker>>(new Map());
-    const [selectedUserMapMarker, setSelectedUserMapMarker] = useState<UserMapMarkerPopupInfo | null>(null);
+    const [selectedMapMarker, setSelectedMapMarker] = useState<MarkerPopupInfo | null>(null);
+    const mapItemsContext = useTeamMapItems()
+
     const regionChangeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [isMarkerLabelVisible, setIsMarkerLabelVisible] = useState(true);
     const [showMarkerTriangle, setShowMarkerTriangle] = useState(false);
@@ -142,15 +153,36 @@ export function MapPage() {
                             label="You"
                             showTriangle={showMarkerTriangle}
                             showAlert={showMarkerAlert}
-                            onPress={() => setSelectedUserMapMarker({
-                                lat: latestLocation.Lat,
-                                lng: latestLocation.Lng,
-                                userId: myUserData?.Id,
-                                isMyUser: true,
-                                reducedInfo: true
+                            onPress={() => setSelectedMapMarker({
+                                user: myUserData,
+                                isCurUser: true,
                             })}
                         />
                     )}
+                    {mapItemsContext?.MapStates?.map(loc => (
+                        <UserMapMarker
+                            key={loc.MobileGpsDeviceId}
+                            color={loc.Color??"blue"}
+                            lat={loc.Latitude}
+                            lng={loc.Longitude}
+                            ref={(ref) => {
+                                if (ref) markerRefs.current.set(loc.MobileGpsDeviceId, ref);
+                                else markerRefs.current.delete(loc.MobileGpsDeviceId);
+                            }}
+                            showLabel={isMarkerLabelVisible}
+                            showTriangle={loc.HasFocus}
+                            showAlert={loc.HasAlert}
+                            label={loc.Label}
+                            onPress={() => {
+                                //const user = partyTeam.data?.Users?.find(u => u.Id === loc.MapEntityId);
+                                setSelectedMapMarker({
+                                    mapItem: loc,
+                                    //user: null
+                                });
+                            }}
+                        />
+                    ))}
+                    
                 </MapView>
             {/* react-native-maps renders Marker children into an off-screen native snapshot
                 target that Espresso/Detox element matchers can't traverse, so a testID inside

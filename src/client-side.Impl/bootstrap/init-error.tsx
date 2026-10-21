@@ -1,6 +1,7 @@
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { InitAppBackground } from './init-app-background';
 
+
 export function InitError(props: {
   title?: string;
   errorMsg?: string;

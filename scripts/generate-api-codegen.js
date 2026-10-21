@@ -20,7 +20,7 @@ async function main() {
 
   await OpenAPI.generate({
     input: spec,
-    output: 'src/app.Commons/dataLayer/open-api',
+    output: 'src/client-side.Commons/dataLayer/open-api',
     httpClient: 'fetch',
   });
 }

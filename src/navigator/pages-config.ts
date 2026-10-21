@@ -1,3 +1,4 @@
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { InitialPage } from '@/pages/test/InitialPage';
 import { RootPage } from '@/pages/test/RootPage';
 import { EditUserProfile } from '@/pages/user/EditUserProfile';
@@ -5,6 +6,8 @@ import { ReportIssuePage } from '@/pages/core/ReportIssuePage';
 import { CrashTestPage } from '@/pages/test/CrashTestPage';
 import { MapPage } from '@/pages/map/MapPage';
 import { JoinTeamPage } from '@/pages/team/join-team';
+import { CreateTeamPage } from '@/pages/team/create-team';
+import { TeamDetailsPage } from '@/pages/team/team-details';
 
 export type NavigatorPages = {
     TfTestingPage: undefined;
@@ -25,9 +28,15 @@ export type NavigatorPages = {
     UserActiveSearchPartyInfo: undefined;
     TeamPage: undefined;
     JoinTeamPage: { joinKey?: string } | undefined;
+    CreateTeamPage: undefined;
+    TeamDetailsPage: undefined;
     UpdatesPage: undefined;
     SettingsPage: undefined;
 }
+
+/** Props injected by the navigator into a page registered as a screen. */
+export type ScreenProps<T extends keyof NavigatorPages> = NativeStackScreenProps<NavigatorPages, T>;
+
 const corePages: NavigatorItem[] = [
 
     {
@@ -57,6 +66,14 @@ const corePages: NavigatorItem[] = [
     {
         name: 'JoinTeamPage',
         component: JoinTeamPage
+    },
+    {
+        name: 'CreateTeamPage',
+        component: CreateTeamPage
+    },
+    {
+        name: 'TeamDetailsPage',
+        component: TeamDetailsPage
     }
 ];
 

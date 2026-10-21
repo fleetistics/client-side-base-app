@@ -4,7 +4,7 @@
  * flag against executable-planting attacks). That stops cmd.exe from implicitly
  * searching the current directory for a bare command name. The React Native CLI always
  * invokes the Gradle wrapper as a bare "gradlew.bat" with cwd=android/ (not "./gradlew.bat"
- * or an absolute path), so on those machines `yarn android` fails with:
+ * or an absolute path), so on those machines `pnpm android` fails with:
  *   'gradlew.bat' is not recognized as an internal or external command
  *
  * cmd.exe still searches PATH even with that flag set, so putting android/ on PATH here

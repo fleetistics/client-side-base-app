@@ -1,13 +1,9 @@
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Text } from '@/app.Commons/components/controls/text';
 import { Button } from '@/app.Commons/components/controls/button';
-import type { NavigatorPages } from '@/navigator/pages-config';
+import type { ScreenProps } from '@/navigator/pages-config';
 
-export function RootPage() {
-  const navigation = useNavigation<NativeStackNavigationProp<NavigatorPages>>();
-
+export function RootPage({ navigation }: ScreenProps<'RootPage'>) {
   return (
     <View className="flex-1 items-center justify-center gap-4 bg-background">
       <Text className="text-lg font-medium">RootPage</Text>
@@ -16,6 +12,9 @@ export function RootPage() {
       </Button>
       <Button onPress={() => navigation.navigate('ReportIssuePage')}>
         <Text>Report an Issue</Text>
+      </Button>
+      <Button onPress={() => navigation.navigate('CreateTeamPage')}>
+        <Text>Create Team</Text>
       </Button>
       <Button variant="outline" onPress={() => navigation.navigate('CrashTestPage')}>
         <Text>Crash Test</Text>

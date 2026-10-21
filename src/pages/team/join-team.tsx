@@ -10,8 +10,8 @@ import { Input } from '@/app.Commons/components/controls/input';
 import { Label } from '@/app.Commons/components/controls/label';
 import { SubmitButton } from '@/app.Commons/components/form/submit-button';
 import { Text } from '@/app.Commons/components/controls/text';
-import { GlobalToast } from '@/app.Commons/utils/global-toast';
-import TeamUtils from '@/app.Commons/utils/team-utils';
+import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
+import TeamUtils from '@/app.Commons/helpers/team-utils';
 import { QrCode } from '@/components/ui/icons';
 import type { NavigatorPages } from '@/navigator/pages-config';
 

@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { InitAppBackground } from '@/app.Impl/initComponents/init-app-background';
-import { LoginPage } from '@/app.Impl/userSession/login';
+import { InitAppBackground } from '@/client-side.Impl/bootstrap/init-app-background';
+import { LoginPage } from '@/client-side.Impl/userSession/login';
 
 type NoAuthStackParamList = {
   Login: undefined;

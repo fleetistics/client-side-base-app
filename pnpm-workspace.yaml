@@ -1,0 +1,10 @@
+# React Native's native builds (android/settings.gradle, ios Podfile, detox) hard-code
+# ../node_modules/<pkg> paths, so keep a flat node_modules instead of pnpm's symlinked store layout.
+nodeLinker: hoisted
+
+# pnpm blocks dependency lifecycle scripts by default (yarn ran them all).
+allowBuilds:
+  '@firebase/util': true
+  detox: true
+  protobufjs: true
+  dtrace-provider: false # optional native addon (via detox's logger); not needed

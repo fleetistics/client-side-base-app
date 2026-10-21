@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { LocationProvider } from '@/app.Commons/services/location/location-provider';
 import { LocationService } from '@/app.Commons/services/location/locationService';
-import { InitWaiter } from '../../app.Impl/initComponents/init-waiter';
-import { useCachedPrivacyMode, useLoadActiveTeamId, useLoadUserLocationPrivacy, usePendingPrivacyMode } from '@/app.Commons/dataLayer/api/user/myUserApi';
+import { InitWaiter } from '../../client-side.Impl/bootstrap/init-waiter';
+import { useCachedPrivacyMode, useLoadUserLocationPrivacy, usePendingPrivacyMode } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
+import { useLoadActiveTeamId } from '@/client-side.Commons/dataLayer/api/team/teamApi';
 import { useOutboxHydrated } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
 
 // App-specific wrapper around the reusable LocationProvider base: LocationProvider only does

@@ -19,17 +19,25 @@ import { MediaUploadService } from '@/app.Commons/services/media-uploader/mediaU
 import { TeamContextService } from '@/app.Commons/services/team/teamContextService';
 import { initLogger } from '@/app.Commons/services/logging/logger';
 import { initCrashReporting } from '@/app.Commons/services/crashReporting/crashReporting';
-import { AppErrorBoundary } from '@/app.Impl/initComponents/app-error-boundary';
+import { AppErrorBoundary } from '@/app.Commons/lib/app-error-boundary';
 import { initI18n } from '@/client-side.Commons/i18n/i18n';
 import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpdater';
-import { reactNativeI18nPlatform } from '@/app.Impl/services/i18n/platform';
+import { reactNativeI18nPlatform } from '@/app.Commons/i18n/platform';
 import { LocationInitializer } from '@/components/init/location-initializer';
 import { User } from 'lucide-react-native';
 import { UserSettingsProvider } from '@/client-side.Commons/components/init/user-settings-provider';
-import { setE2EMode, isE2EMode } from '@/app.Impl/testSupport/e2e-mode';
-import { E2EMockLocation } from '@/app.Impl/testSupport/e2e-mock-location';
+import { setE2EMode, isE2EMode } from '@/app.Commons/testSupport/e2e-mode';
+import { E2EMockLocation } from '@/app.Commons/testSupport/e2e-mock-location';
 import { getOutbox } from '@/client-side.Commons/dataLayer/outbox/outbox';
-import { reactNativeOutboxPlatform } from '@/app.Impl/services/outbox/platform';
+import { reactNativeOutboxPlatform } from '@/app.Commons/services/outbox/platform';
+import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
+import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
+import { GlobalToastImpl } from '@/app.Commons/lib/global-toast-impl';
+import { GlobalAlertImpl } from '@/app.Commons/lib/global-alert-impl';
+
+// Registered at module load (not in an effect) so child components can use them from their first mount.
+GlobalToast.SetInstance(new GlobalToastImpl());
+GlobalAlert.SetInstance(new GlobalAlertImpl());
 
 type AppProps = {
   // Only ever set by Detox's launchArgs, forwarded as initialProps via MainActivity.kt's
@@ -50,10 +58,10 @@ function App({ e2eMockMap }: AppProps) {
     // Offline-first mutation queue: loads what was queued before the app last closed, then
     // sends it once a session exists (see client-side.Commons/dataLayer/outbox).
     void getOutbox(store).start(reactNativeOutboxPlatform);
-    void initI18n(reactNativeI18nPlatform, { testMode: true });
+    void initI18n(reactNativeI18nPlatform, { noTranslation: true });
     setTimeout(() => {
       hideSplash();
-    }, 4000);
+    }, 50);
   }, []);
 
   // Background translation refresh — mount once at the app root, after the initI18n()

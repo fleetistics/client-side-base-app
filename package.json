@@ -2,6 +2,7 @@
   "name": "BaseApp",
   "version": "0.0.1",
   "private": true,
+  "packageManager": "pnpm@12.14.0",
   "scripts": {
     "android": "node scripts/with-android-path.js --active-arch-only",
     "ios": "react-native run-ios",
@@ -27,6 +28,7 @@
     "@rn-primitives/slot": "^1.5.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "google-libphonenumber": "^3.2.44",
     "i18next": "^26.4.2",
     "lucide-react-native": "^1.47.0",
     "nativewind": "^4.2.7",
@@ -70,6 +72,7 @@
     "@react-native/typescript-config": "0.87.1",
     "@testing-library/react-native": "^13.3.3",
     "@transistorsoft/background-geolocation-types": "^5.3.2",
+    "@types/google-libphonenumber": "^7.4.30",
     "@types/jest": "^29.5.14",
     "@types/pngjs": "^6.0.5",
     "@types/react": "^19.3.0",

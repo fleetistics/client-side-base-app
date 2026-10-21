@@ -5,13 +5,13 @@ const { getBaseUrl } = require('./get-base-url');
 const baseUrl = getBaseUrl();
 
 const result = spawnSync(
-  'yarn',
+  'pnpm',
   [
-    'dlx', '-q',
-    '-p', 'typescript@^5.9.2',
-    '-p', 'openapi-typescript@^7',
+    'dlx',
+    '--package=typescript@^5.9.2',
+    '--package=openapi-typescript@^7',
     'openapi-typescript', `${baseUrl}/openapi/v1.json`,
-    '-o', 'src/app.Commons/dataLayer/apiSchema.d.ts',
+    '-o', 'src/client-side.Commons/dataLayer/apiSchema.d.ts',
   ],
   { stdio: 'inherit', shell: true }
 );

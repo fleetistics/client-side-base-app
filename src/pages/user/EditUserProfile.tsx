@@ -7,11 +7,11 @@ import { ControlField } from '@/app.Commons/components/form/control-field';
 import { SubmitButton } from '@/app.Commons/components/form/submit-button';
 import { MediaSelector } from '@/app.Commons/components/image/media-selector';
 import { GetPatchValue } from '@/app.Commons/components/form/get-patch-value';
-import { useGetMyUser, usePatchUser } from '@/app.Commons/dataLayer/api/user/myUserApi';
-import type { User, UserPatch } from '@/app.Commons/dataLayer/model/user/userDto';
+import { useGetMyUser, usePatchUser } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
+import type { UserPatch } from '@/client-side.Commons/dataLayer/model/user/userPatchDto';
 import { useRef } from 'react';
 import { BuildFormPatchValue } from '@/client-side.Commons/helpers/form-helper';
-import { EditUser, EditUserGroupKey } from '@/app.Commons/dataLayer/model/user/edit-user';
+import { EditUser, EditUserGroupKey } from '@/client-side.Commons/dataLayer/model/user/edit-user';
 import { EditorUploadedMedia } from '@/client-side.Commons/dataLayer/model/uploaded-media';
 import { StartMediaUpload } from '@/app.Commons/services/media-uploader/mediaUploadService';
 
