@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LocationProvider } from '@/app.Commons/services/location/location-provider';
 import { LocationService } from '@/app.Commons/services/location/locationService';
 import { InitWaiter } from '../../client-side.Impl/bootstrap/init-waiter';
-import { useCachedPrivacyMode, useLoadUserLocationPrivacy, usePendingPrivacyMode } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
+
 import { useLoadActiveTeamId } from '@/client-side.Commons/dataLayer/api/team/teamApi';
-import { useOutboxHydrated } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
+import { useGetOnceMyUserPrivacyMode } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
 
 // App-specific wrapper around the reusable LocationProvider base: LocationProvider only does
 // the BackgroundGeolocation wiring and never blocks rendering, so this is where an app decides
@@ -12,27 +12,18 @@ import { useOutboxHydrated } from '@/client-side.Commons/dataLayer/outbox/outbox
 export function LocationInitializer(props: { children: React.ReactNode }) {
     const [isLocationInitialized, setIsLocationInitialized] = useState(false);
     const [isLocationStarted, setIsLocationStarted] = useState(false);
-    const [loadUserPrivacy, { data: userPrivacy, error: privacyError, isLoading: isPrivacyLoading, isSuccess: isPrivacyLoaded }] = useLoadUserLocationPrivacy();
-    const [loadActiveTeamId, { data: activeTeamId, error: teamIdError, isLoading: isTeamIdLoading, isSuccess: isTeamIdLoaded }] = useLoadActiveTeamId();
     // Privacy is offline-first: a choice the server hasn't confirmed yet (queued before an
     // app restart, say) must win over the server's older value, or the app would start
-    // reporting location for a user who went private offline. The cache already has pending
-    // changes applied; the pending value covers the case where it isn't loaded.
-    const isOutboxHydrated = useOutboxHydrated();
-    const pendingPrivacyMode = usePendingPrivacyMode();
-    const cachedPrivacyMode = useCachedPrivacyMode();
-    const isPrivate = pendingPrivacyMode ?? cachedPrivacyMode ?? (((userPrivacy?.PrivacyMode) ?? 0) > 0);
-    // Read through a ref: this effect applies the startup value only (plus a re-apply once location
-    // has started). Later switches go through useSwitchUserPrivacyMode, which sets LocationService
-    // itself - re-running on them would also re-assert report mode below.
-    const isPrivateRef = useRef(isPrivate);
-    isPrivateRef.current = isPrivate;
+    // reporting location for a user who went private offline. useGetOnceUserPrivacyMode waits
+    // for the outbox to hydrate, then holds the startup value - later switches go through
+    // usePatchUserLocationPrivacy, which sets LocationService itself.
+    const { data: isPrivate, error: privacyError, isLoading: isPrivacyLoading, isSuccess: isPrivacyLoaded } = useGetOnceMyUserPrivacyMode();
+    const [loadActiveTeamId, { data: activeTeamId, error: teamIdError, isLoading: isTeamIdLoading, isSuccess: isTeamIdLoaded }] = useLoadActiveTeamId();
 
-    console.log(`[LocationInitializer] isLocationStarted=${isLocationStarted}, isPrivacyLoading=${isPrivacyLoading}, isTeamIdLoading=${isTeamIdLoading}, isPrivacyLoaded=${isPrivacyLoaded}, isTeamIdLoaded=${isTeamIdLoaded}, privacyError=${privacyError}, teamIdError=${teamIdError}, userPrivacy=${JSON.stringify(userPrivacy)}, activeTeamId=${activeTeamId}`);
+    console.log(`[LocationInitializer] isLocationStarted=${isLocationStarted}, isPrivacyLoading=${isPrivacyLoading}, isTeamIdLoading=${isTeamIdLoading}, isPrivacyLoaded=${isPrivacyLoaded}, isTeamIdLoaded=${isTeamIdLoaded}, privacyError=${privacyError}, teamIdError=${teamIdError}, isPrivate=${isPrivate}, activeTeamId=${activeTeamId}`);
     useEffect(() => {
-        loadUserPrivacy();
         loadActiveTeamId();
-    }, [loadUserPrivacy, loadActiveTeamId]);
+    }, [loadActiveTeamId]);
 
     useEffect(() => {
         if (isPrivacyLoading || isTeamIdLoading) return;
@@ -42,15 +33,15 @@ export function LocationInitializer(props: { children: React.ReactNode }) {
             setIsLocationInitialized(true);
             return;
         }
-        if (!isPrivacyLoaded || !isTeamIdLoaded || !isOutboxHydrated) return;
+        if (!isPrivacyLoaded || !isTeamIdLoaded) return;
         if (activeTeamId) {
-            LocationService.SetBothPrivateMode_ReportLocationMode(isPrivateRef.current, true);
+            LocationService.SetBothPrivateMode_ReportLocationMode(isPrivate, true);
         }
         else {
-            LocationService.SetPrivateMode(isPrivateRef.current);
+            LocationService.SetPrivateMode(isPrivate);
         }
         setIsLocationInitialized(true);
-    }, [isLocationStarted, activeTeamId, privacyError, teamIdError, isPrivacyLoading, isTeamIdLoading, isPrivacyLoaded, isTeamIdLoaded, isOutboxHydrated]);
+    }, [isLocationStarted, activeTeamId, isPrivate, privacyError, teamIdError, isPrivacyLoading, isTeamIdLoading, isPrivacyLoaded, isTeamIdLoaded]);
 
     return (
         <LocationProvider setIsLocationStarted={setIsLocationStarted}>

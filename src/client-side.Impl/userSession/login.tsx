@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
-import { APP_CONFIG } from '@/app.Impl/configs/app-config';
+import { APP_CONFIG } from '@/client-side.Impl/config/app-config';
 import { useLoginMutation } from '@/client-side.Commons/userSession/userSessionApi';
 import { Alert, AlertDescription } from '@/app.Commons/components/controls/alert';
 import { Button } from '@/app.Commons/components/controls/button';

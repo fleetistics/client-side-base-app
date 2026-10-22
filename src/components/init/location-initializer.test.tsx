@@ -13,14 +13,13 @@ jest.mock('@/app.Commons/services/location/location-provider', () => ({
 }));
 
 const PRIVACY_PATH = '/api/users/me/location-privacy';
-const TEAM_PATH = '/api/users/me/active-team-id';
+const TEAM_PATH = '/api/team/active';
 
 const pendingPrivate: OutboxItem = {
   operationId: 'op-private',
   endpointName: 'patchUserLocationPrivacy',
   args: { PrivacyMode: 1 },
   entityKeys: ['UserLocationPrivacy:ME'],
-  userId: 7,
   createdAt: 1,
   status: 'pending',
   attempts: 1,
@@ -47,10 +46,11 @@ async function renderWithQueue(queued: OutboxItem[]) {
   const outbox = getOutbox(store);
   outboxes.push(outbox);
   const data = new Map([['outbox.v1', JSON.stringify({ version: 1, items: queued })]]);
-  void outbox.start({
+  outbox.start({
     storage: { getItem: async (k) => data.get(k) ?? null, setItem: async (k, v) => void data.set(k, v) },
     getUserId: () => 7,
   });
+  void outbox.startSending();
 
   render(
     <Provider store={store}>

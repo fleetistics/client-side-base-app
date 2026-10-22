@@ -4,12 +4,15 @@ import { Button } from '@/app.Commons/components/controls/button';
 import { Text } from '@/app.Commons/components/controls/text';
 import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
-import { useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
+import { PRIVACY_ENTITY_KEY, useGetUserPrivacyMode, usePatchUserLocationPrivacy } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
+import { useOutboxStatus } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
 
 export function CrashTestPage() {
   const [shouldCrash, setShouldCrash] = useState(false);
   const { data: isPrivacyModeOn, isLoading: isPrivacyModeLoading } = useGetUserPrivacyMode();
-  const [, privacySync, togglePrivacyMode] = useSwitchUserPrivacyMode();
+  const patchPrivacy = usePatchUserLocationPrivacy();
+  const privacySync = useOutboxStatus(PRIVACY_ENTITY_KEY);
+  const togglePrivacyMode = () => patchPrivacy({ PrivacyMode: isPrivacyModeOn ? 0 : 1 });
 
   // Thrown during render (not inside the onPress handler) so React's error boundary
   // actually catches it — a throw inside an event handler is not a React render error

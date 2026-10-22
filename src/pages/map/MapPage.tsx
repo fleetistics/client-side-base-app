@@ -6,9 +6,10 @@ import { NAV_THEME } from '@/uiColorScheme/constants';
 import { mapDarkModeStyle } from '@/uiColorScheme/dark-map-style';
 import { useLatestGPSLocation } from '@/app.Commons/dataLayer/api/other/locationApi';
 import { useGetStringAppSettings } from '@/client-side.Commons/dataLayer/api/appSettingsApi';
-import { AppCommonUserSettingsEnum } from '@/app.Commons/configs/app-user-settings-enums';
 import { MapUtils } from '@/app.Commons/helpers/map-utils';
-import { useGetMyUser, useGetMyUserQuery, useGetUserPrivacyMode, useSwitchUserPrivacyMode } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
+import { useGetMyUser, useGetMyUserQuery } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
+import { PRIVACY_ENTITY_KEY, useGetUserPrivacyMode, usePatchUserLocationPrivacy } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
+import { useOutboxStatus } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
 import { UserMapMarker } from '@/app.Commons/components/map/user-map-marker';
 import { UserMapMarkerPopupInfo } from '@/app.Commons/components/map/marker-popup-info';
 import { Button } from '@/app.Commons/components/controls/button';
@@ -17,6 +18,7 @@ import { isE2EMode, E2E_MOCK_LOCATION } from '@/app.Commons/testSupport/e2e-mode
 import { TeamMapItem  } from '@/app.Commons/services/team/team-context';
 import { UserDto } from '@/client-side.Commons/dataLayer/open-api/models/UserDto';
 import { useTeamMapItems } from '@/app.Commons/services/team/teamContextService';
+import { AppUserSettingsEnum } from '@/app.Commons/configs/user-settings-enum';
 
 type MarkerPopupInfo = {
     mapItem?: TeamMapItem;
@@ -41,11 +43,13 @@ export function MapPage() {
     const [showsMyLocationButton, setShowsMyLocationButton] = useState(true);
     const [isMapReady, setIsMapReady] = useState(false);
     const [mapZoomedState, setMapZoomedState] = useState(false);
-    const mapType = useGetStringAppSettings(AppCommonUserSettingsEnum.mapType, 'hybrid').data as MapType;
-    const mapZoomedType = useGetStringAppSettings(AppCommonUserSettingsEnum.mapZoomedType, 'satellite').data as MapType;
+    const mapType = useGetStringAppSettings(AppUserSettingsEnum.mapType, 'hybrid').data as MapType;
+    const mapZoomedType = useGetStringAppSettings(AppUserSettingsEnum.mapZoomedType, 'satellite').data as MapType;
 
       const { data: isPrivacyModeOn } = useGetUserPrivacyMode();
-      const [, privacySync, togglePrivacyMode] = useSwitchUserPrivacyMode();
+      const patchPrivacy = usePatchUserLocationPrivacy();
+      const privacySync = useOutboxStatus(PRIVACY_ENTITY_KEY);
+      const togglePrivacyMode = () => patchPrivacy({ PrivacyMode: isPrivacyModeOn ? 0 : 1 });
       // Offline-first: the mode is already in effect on this device; this only says whether the server has it.
       const privacySyncSuffix = privacySync.failed ? ' (not saved)' : privacySync.isPending ? ' (syncing)' : '';
     

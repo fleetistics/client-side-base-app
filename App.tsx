@@ -25,7 +25,7 @@ import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpd
 import { reactNativeI18nPlatform } from '@/app.Commons/i18n/platform';
 import { LocationInitializer } from '@/components/init/location-initializer';
 import { User } from 'lucide-react-native';
-import { UserSettingsProvider } from '@/client-side.Commons/components/init/user-settings-provider';
+import { UserSettingsProvider } from '@/client-side.Commons/bootstrap/user-settings-provider';
 import { setE2EMode, isE2EMode } from '@/app.Commons/testSupport/e2e-mode';
 import { E2EMockLocation } from '@/app.Commons/testSupport/e2e-mock-location';
 import { getOutbox } from '@/client-side.Commons/dataLayer/outbox/outbox';
@@ -55,9 +55,10 @@ function App({ e2eMockMap }: AppProps) {
     InitAppStateListener();
     MediaUploadService.Create();
     TeamContextService.Create();
-    // Offline-first mutation queue: loads what was queued before the app last closed, then
-    // sends it once a session exists (see client-side.Commons/dataLayer/outbox).
-    void getOutbox(store).start(reactNativeOutboxPlatform);
+    // Offline-first mutation queue: gives it its platform. What was queued before the app last
+    // closed is loaded and sent once UserSessionProvider has a session (see
+    // client-side.Commons/dataLayer/outbox).
+    getOutbox(store).start(reactNativeOutboxPlatform);
     void initI18n(reactNativeI18nPlatform, { noTranslation: true });
     setTimeout(() => {
       hideSplash();
