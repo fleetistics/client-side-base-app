@@ -8,6 +8,7 @@ module.exports = {
         alias: {
           '@': './src',
           '@test-utils': './src/test/test-utils.tsx',
+          '@server-side-base-url': './server-side-base-url.ts',
         },
       },
     ],
