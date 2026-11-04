@@ -25,6 +25,7 @@ import { BuildFormPatchValue } from '@/client-side.Commons/helpers/form-helper';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
 import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import type { ScreenProps } from '@/navigator/pages-config';
+import { LocationReportEnabledManager } from '@/client-side.Impl/services/location-report-enabler';
 
 export function TeamDetailsPage({ navigation }: ScreenProps<'TeamDetailsPage'>) {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ export function TeamDetailsPage({ navigation }: ScreenProps<'TeamDetailsPage'>) 
         notifyAuthLost();
         return;
       }
-      LocationService.SetReportLocationMode(true);
+      LocationReportEnabledManager.GetInstance().SetHasCompany(true);
       TeamContextService.StartTeam(teamId);
       GlobalToast.ShowSuccess(t('Mission started'));
       navigation.replace('MainMap');

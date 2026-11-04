@@ -23,7 +23,7 @@ import { AppErrorBoundary } from '@/app.Commons/lib/app-error-boundary';
 import { initI18n } from '@/client-side.Commons/i18n/i18n';
 import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpdater';
 import { reactNativeI18nPlatform } from '@/app.Commons/i18n/platform';
-import { LocationInitializer } from '@/components/init/location-initializer';
+import { LocationInitializer } from '@/client-side.Impl/bootstrap/location-initializer';
 import { User } from 'lucide-react-native';
 import { UserSettingsProvider } from '@/client-side.Commons/bootstrap/user-settings-provider';
 import { setE2EMode, isE2EMode } from '@/app.Commons/testSupport/e2e-mode';

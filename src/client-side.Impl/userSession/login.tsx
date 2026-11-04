@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { APP_CONFIG } from '@/client-side.Impl/config/app-config';
 import { useLoginMutation } from '@/client-side.Commons/userSession/userSessionApi';
 import { Alert, AlertDescription } from '@/app.Commons/components/controls/alert';
@@ -9,6 +10,7 @@ import { Checkbox } from '@/app.Commons/components/controls/checkbox';
 import { Input } from '@/app.Commons/components/controls/input';
 import { Label } from '@/app.Commons/components/controls/label';
 import { Text } from '@/app.Commons/components/controls/text';
+import type { NoAuthNavigation } from '@/client-side.Impl/userSession/noauth-routes';
 import { Eye, EyeOff } from '@/components/ui/icons';
 
 type FormValues = {
@@ -18,10 +20,11 @@ type FormValues = {
 };
 
 export function LoginPage(props: { reloadSessionFunc?: () => void }) {
+  const navigation = useNavigation<NoAuthNavigation>();
   const [showPassword, setShowPassword] = useState(false);
   const [login, loginState] = useLoginMutation();
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { UserName: '', Password: '', RememberMe: false },
+    defaultValues: { UserName: '', Password: '', RememberMe: true },
   });
 
   const onSubmit = handleSubmit(async (values) => {
@@ -111,7 +114,7 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
           />
           <Label className="font-normal">Remember me</Label>
         </View>
-        <Pressable>
+        <Pressable onPress={() => navigation.navigate('ResetPassword')}>
           <Text className="text-sm text-primary">Forgot password?</Text>
         </Pressable>
       </View>
@@ -125,6 +128,13 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
       <Button testID="login-submit-button" onPress={() => onSubmit()} className="w-full" disabled={loginState.isLoading}>
         <Text>{loginState.isLoading ? 'Signing in…' : 'Sign in'}</Text>
       </Button>
+
+      <View className="flex-row items-center justify-center gap-1">
+        <Text className="text-sm text-muted-foreground">Don't have an account?</Text>
+        <Button variant="link" size="sm" className="h-auto p-0" onPress={() => navigation.navigate('Register')}>
+          <Text>Create account</Text>
+        </Button>
+      </View>
     </View>
   );
 }

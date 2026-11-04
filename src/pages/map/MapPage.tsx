@@ -8,7 +8,7 @@ import { useLatestGPSLocation } from '@/app.Commons/dataLayer/api/other/location
 import { useGetStringAppSettings } from '@/client-side.Commons/dataLayer/api/appSettingsApi';
 import { MapUtils } from '@/app.Commons/helpers/map-utils';
 import { useGetMyUser, useGetMyUserQuery } from '@/client-side.Commons/dataLayer/api/user/myUserApi';
-import { PRIVACY_ENTITY_KEY, useGetUserPrivacyMode, usePatchUserLocationPrivacy } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
+import { PRIVACY_ENTITY_KEY, useGetMyUserPrivacyMode, usePatchMyUserLocationPrivacy } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
 import { useOutboxStatus } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
 import { UserMapMarker } from '@/app.Commons/components/map/user-map-marker';
 import { UserMapMarkerPopupInfo } from '@/app.Commons/components/map/marker-popup-info';
@@ -46,8 +46,8 @@ export function MapPage() {
     const mapType = useGetStringAppSettings(AppUserSettingsEnum.mapType, 'hybrid').data as MapType;
     const mapZoomedType = useGetStringAppSettings(AppUserSettingsEnum.mapZoomedType, 'satellite').data as MapType;
 
-      const { data: isPrivacyModeOn } = useGetUserPrivacyMode();
-      const patchPrivacy = usePatchUserLocationPrivacy();
+      const { data: isPrivacyModeOn } = useGetMyUserPrivacyMode();
+      const patchPrivacy = usePatchMyUserLocationPrivacy();
       const privacySync = useOutboxStatus(PRIVACY_ENTITY_KEY);
       const togglePrivacyMode = () => patchPrivacy({ PrivacyMode: isPrivacyModeOn ? 0 : 1 });
       // Offline-first: the mode is already in effect on this device; this only says whether the server has it.

@@ -4,13 +4,13 @@ import { Button } from '@/app.Commons/components/controls/button';
 import { Text } from '@/app.Commons/components/controls/text';
 import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
-import { PRIVACY_ENTITY_KEY, useGetUserPrivacyMode, usePatchUserLocationPrivacy } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
+import { PRIVACY_ENTITY_KEY, useGetMyUserPrivacyMode, usePatchMyUserLocationPrivacy } from '@/client-side.Commons/dataLayer/api/user/myUserLocationPrivacyApi';
 import { useOutboxStatus } from '@/client-side.Commons/dataLayer/outbox/outboxHooks';
 
 export function CrashTestPage() {
   const [shouldCrash, setShouldCrash] = useState(false);
-  const { data: isPrivacyModeOn, isLoading: isPrivacyModeLoading } = useGetUserPrivacyMode();
-  const patchPrivacy = usePatchUserLocationPrivacy();
+  const { data: isPrivacyModeOn, isLoading: isPrivacyModeLoading } = useGetMyUserPrivacyMode();
+  const patchPrivacy = usePatchMyUserLocationPrivacy();
   const privacySync = useOutboxStatus(PRIVACY_ENTITY_KEY);
   const togglePrivacyMode = () => patchPrivacy({ PrivacyMode: isPrivacyModeOn ? 0 : 1 });
 

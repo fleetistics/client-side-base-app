@@ -11,7 +11,7 @@
     "start": "react-native start",
     "test": "jest",
     "generate:api": "node scripts/generate-api.js",
-    "generate:api:codegen": "node scripts/generate-api-codegen.js",
+    "generate:api:codegen": "node --use-system-ca scripts/generate-api-codegen.js",
     "e2e:build:android": "detox build -c android.att.debug",
     "e2e:test:android": "detox test -c android.att.debug"
   },
