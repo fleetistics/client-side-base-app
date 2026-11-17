@@ -1,4 +1,4 @@
-server-side-base-url.ts
+server-side-base-url.local.ts
 
 # Detox e2e
 e2e/artifacts/

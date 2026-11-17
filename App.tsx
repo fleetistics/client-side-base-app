@@ -5,7 +5,7 @@
  * @format
  */
 
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { store } from './src/client-side.Commons/dataLayer/core/store';
@@ -34,10 +34,14 @@ import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
 import { GlobalToastImpl } from '@/app.Commons/lib/global-toast-impl';
 import { GlobalAlertImpl } from '@/app.Commons/lib/global-alert-impl';
+import { SetApplicationId, SetPlatformId } from '@/client-side.Commons/lib/StaticAppSettings';
+
 
 // Registered at module load (not in an effect) so child components can use them from their first mount.
 GlobalToast.SetInstance(new GlobalToastImpl());
 GlobalAlert.SetInstance(new GlobalAlertImpl());
+SetApplicationId(1);
+SetPlatformId(Platform.OS === 'ios' ? 2 : 1);
 
 type AppProps = {
   // Only ever set by Detox's launchArgs, forwarded as initialProps via MainActivity.kt's

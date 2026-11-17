@@ -13,13 +13,19 @@
 const path = require('path');
 const { spawnSync } = require('child_process');
 
+// --local: build against the gitignored server-side-base-url.local.ts (see babel.config.js).
+const args = process.argv.slice(2);
+const local = args.includes('--local');
+const rnArgs = args.filter(a => a !== '--local');
+
 const androidDir = path.join(__dirname, '..', 'android');
 const env = {
   ...process.env,
   PATH: `${androidDir}${path.delimiter}${process.env.PATH ?? ''}`,
+  APP_ENV: local ? 'local' : '',
 };
 
-const result = spawnSync('npx', ['react-native', 'run-android', ...process.argv.slice(2)], {
+const result = spawnSync('npx', ['react-native', 'run-android', ...rnArgs], {
   stdio: 'inherit',
   env,
   shell: true,
