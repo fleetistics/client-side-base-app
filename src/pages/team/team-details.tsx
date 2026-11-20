@@ -15,11 +15,8 @@ import type { TeamCreatePatchDto } from '@/client-side.Commons/dataLayer/open-ap
 import { LocationService } from '@/app.Commons/services/location/locationService';
 import { StartMediaUpload } from '@/app.Commons/services/media-uploader/mediaUploadService';
 import { TeamContextService } from '@/app.Commons/services/team/teamContextService';
-import {
-  createStandaloneRefreshApi,
-  notifyAuthLost,
-  refreshAccessToken,
-} from '@/client-side.Commons/dataLayer/core/apiSlice';
+import { notifyAuthLost } from '@/client-side.Commons/dataLayer/core/apiSlice';
+import { createStandaloneRefreshApi, refreshAccessToken } from '@/client-side.Commons/userSession/userSessionApi';
 import { getErrorMessage } from '@/client-side.Commons/dataLayer/core/apiError';
 import { BuildFormPatchValue } from '@/client-side.Commons/helpers/form-helper';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';

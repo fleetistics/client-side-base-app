@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
+import * as Keychain from 'react-native-keychain';
+import { MobileSessionKeyStore } from './MobileSessionKeyStore';
 import { useNavigation } from '@react-navigation/native';
 import { APP_CONFIG } from '@/client-side.Impl/config/app-config';
 import { useLoginMutation } from '@/client-side.Commons/userSession/userSessionApi';
@@ -12,35 +14,97 @@ import { Label } from '@/app.Commons/components/controls/label';
 import { Text } from '@/app.Commons/components/controls/text';
 import type { NoAuthNavigation } from '@/client-side.Impl/userSession/noauth-routes';
 import { Eye, EyeOff } from '@/components/ui/icons';
+import { MobileGpsDeviceProvider } from './mobile-gps-device-provider';
+import { LoginRequestData } from '@/client-side.Commons/dataLayer/open-api/models/LoginRequestData';
+import { ClientSideInfoProvider } from '@/client-side.Commons/userSession/ClientSideInfoProvider';
+import { getErrorMessage, getErrorStatus } from '@/client-side.Commons/dataLayer/core/apiError';
 
-type FormValues = {
-  UserName: string;
-  Password: string;
-  RememberMe: boolean;
-};
+// doEnableBiometry is a device-side choice: it is not part of LoginRequestData and is never sent to the server.
+type FormValues = LoginRequestData & { doEnableBiometry: boolean };
+
+/** Label of the biometry the device offers, named as the platform names it. */
+function getBiometryLabel(type: Keychain.BIOMETRY_TYPE): string {
+  const B = Keychain.BIOMETRY_TYPE;
+  switch (type) {
+    case B.FACE_ID: return 'Face ID';
+    case B.TOUCH_ID: return 'Touch ID';
+    case B.OPTIC_ID: return 'Optic ID';
+    case B.FINGERPRINT: return 'fingerprint';
+    case B.FACE: return 'face unlock';
+    case B.IRIS: return 'iris scan';
+    default: return Platform.OS === 'ios' ? 'Face ID / Touch ID' : 'biometrics';
+  }
+}
 
 export function LoginPage(props: { reloadSessionFunc?: () => void }) {
   const navigation = useNavigation<NoAuthNavigation>();
   const [showPassword, setShowPassword] = useState(false);
+  // null = device has no (enrolled) biometrics: the checkbox is hidden.
+  const [biometryType, setBiometryType] = useState<Keychain.BIOMETRY_TYPE | null>(null);
   const [login, loginState] = useLoginMutation();
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { UserName: '', Password: '', RememberMe: true },
+    defaultValues: { UserName: '', Password: '', RememberMe: true, doEnableBiometry: false },
   });
 
-  const onSubmit = handleSubmit(async (values) => {
+  useEffect(() => {
+    setBiometryType(MobileSessionKeyStore.GetBiometryType());
+  }, []);
+
+  // handleSubmit skips the success callback without any signal when a `required` rule fails
+  // (empty field, or an autofill/password manager that filled the native input without
+  // firing onChangeText). Surface it instead of looking like a dead button.
+  const [formError, setFormError] = useState<string | undefined>();
+
+  const onSubmit = handleSubmit(async ({ doEnableBiometry, ...values }) => {
+    setFormError(undefined);
+    const t0 = Date.now();
+    const lap = (step: string) => console.log(`[login] ${step} +${Date.now() - t0}ms`);
     try {
-      await login(values).unwrap();
+      lap('submit');
+      values.GpsDeviceSerial = await MobileGpsDeviceProvider.GetDeviceSerialNumber();
+      lap('GetDeviceSerialNumber done');
+      await ClientSideInfoProvider.CheckInfoCollected ();
+      lap('CheckInfoCollected done');
+      values.ClientSideInfo = ClientSideInfoProvider.Info;
+      // Set before the login: the session key is saved in this mode when the sign-in completes.
+
+      const res = await login(values).unwrap();
+      lap('login response received');
+      if ( res.SessionKey && res.SessionSign && res.RotationCounter !== undefined) {
+        await MobileSessionKeyStore.GetInstance().SaveSessionData(
+          res.SessionKey,
+          res.SessionSign,
+          res.RotationCounter,
+          doEnableBiometry
+        );
+      }
       // Re-runs the session check, which stores the token and swaps in the app UI.
       props.reloadSessionFunc?.();
-    } catch {
+    } catch (e) {
       // Rendered below from loginState.error.
+      lap(`FAILED ${JSON.stringify(e)}`);
     }
+  }, (errors) => {
+    console.log(`[login] submit blocked by validation, invalid fields: ${Object.keys(errors).join(', ')}`);
+    setFormError('Enter your username and password.');
   });
 
+  // A mount/unmount pair that repeats means something above is swapping this screen out
+  // (the "blinking"), which also resets the mutation state and hides the error.
+  useEffect(() => {
+    console.log('[login] LoginPage mounted');
+    return () => console.log('[login] LoginPage unmounted');
+  }, []);
+
+  // The server's own message wins; the fallbacks apply only when it sent none. Network
+  // failures (no response) are described by getErrorMessage from the original fetch error.
   const loginError = loginState.isError
-    ? (loginState.error as { status?: unknown }).status === 401
-      ? 'Invalid username or password'
-      : 'Sign in failed — please try again'
+    ? getErrorMessage(
+        loginState.error,
+        getErrorStatus(loginState.error) === 401
+          ? 'Invalid username or password'
+          : 'Sign in failed — please try again'
+      )
     : undefined;
 
   return (
@@ -109,7 +173,7 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
             control={control}
             name="RememberMe"
             render={({ field: { onChange, value } }) => (
-              <Checkbox checked={value} onCheckedChange={onChange} />
+              <Checkbox checked={!!value} onCheckedChange={onChange} />
             )}
           />
           <Label className="font-normal">Remember me</Label>
@@ -119,13 +183,26 @@ export function LoginPage(props: { reloadSessionFunc?: () => void }) {
         </Pressable>
       </View>
 
-      {loginError && (
+      {biometryType != null && (
+        <View className="flex-row items-center gap-2">
+          <Controller
+            control={control}
+            name="doEnableBiometry"
+            render={({ field: { onChange, value } }) => (
+              <Checkbox testID="login-biometry-checkbox" checked={value} onCheckedChange={onChange} />
+            )}
+          />
+          <Label className="font-normal">Use {getBiometryLabel(biometryType)} to unlock the app</Label>
+        </View>
+      )}
+
+      {(formError ?? loginError) && (
         <Alert variant="destructive">
-          <AlertDescription>{loginError}</AlertDescription>
+          <AlertDescription>{formError ?? loginError}</AlertDescription>
         </Alert>
       )}
 
-      <Button testID="login-submit-button" onPress={() => onSubmit()} className="w-full" disabled={loginState.isLoading}>
+      <Button testID="login-submit-button" onPress={() => { console.log(`[login] Sign in pressed, isLoading=${loginState.isLoading}`); void onSubmit(); }} className="w-full" disabled={loginState.isLoading}>
         <Text>{loginState.isLoading ? 'Signing in…' : 'Sign in'}</Text>
       </Button>
 

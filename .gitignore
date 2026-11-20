@@ -1,4 +1,5 @@
 server-side-base-url.local.ts
+app-hash.local.ts
 
 # Detox e2e
 e2e/artifacts/

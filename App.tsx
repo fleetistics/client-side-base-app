@@ -34,14 +34,18 @@ import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
 import { GlobalToastImpl } from '@/app.Commons/lib/global-toast-impl';
 import { GlobalAlertImpl } from '@/app.Commons/lib/global-alert-impl';
-import { SetApplicationId, SetPlatformId } from '@/client-side.Commons/lib/StaticAppSettings';
+import { MobileClientSideInfoProvider } from '@/client-side.Impl/userSession/MobileClientSideInfoProvider';
+import { MobileSessionKeyStore } from '@/client-side.Impl/userSession/MobileSessionKeyStore';
+import { USER_SESSION_CONSTS } from '@/client-side.Impl/config/userSession-consts';
 
 
 // Registered at module load (not in an effect) so child components can use them from their first mount.
 GlobalToast.SetInstance(new GlobalToastImpl());
 GlobalAlert.SetInstance(new GlobalAlertImpl());
-SetApplicationId(1);
-SetPlatformId(Platform.OS === 'ios' ? 2 : 1);
+
+MobileClientSideInfoProvider.Register();
+// Session key / rotation key in Keychain/Keystore; biometrics off until SetBiometricsEnabled(true).
+MobileSessionKeyStore.Register(USER_SESSION_CONSTS.AUTO_LOGIN_MODE);
 
 type AppProps = {
   // Only ever set by Detox's launchArgs, forwarded as initialProps via MainActivity.kt's

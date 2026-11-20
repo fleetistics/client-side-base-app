@@ -41,6 +41,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to take photos and videos for your profile and records.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Face ID is used to unlock your saved sign-in on this device.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Used to record audio when capturing video.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

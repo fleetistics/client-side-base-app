@@ -25,6 +25,20 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 jest.mock('react-native-permissions', () => require('react-native-permissions/mock'));
 
+// Keychain has no bundled mock: an empty, always-succeeding store (nothing saved, no biometrics).
+// Keeps the real enums so code using ACCESS_CONTROL / ERROR_CODE etc. still loads.
+jest.mock('react-native-keychain', () => {
+  const actual = jest.requireActual('react-native-keychain/src/enums');
+  return {
+    ...actual,
+    setGenericPassword: jest.fn(() => Promise.resolve({ service: 'mock', storage: 'keychain' })),
+    getGenericPassword: jest.fn(() => Promise.resolve(false)),
+    hasGenericPassword: jest.fn(() => Promise.resolve(false)),
+    resetGenericPassword: jest.fn(() => Promise.resolve(true)),
+    getSupportedBiometryType: jest.fn(() => Promise.resolve(null)),
+  };
+});
+
 jest.mock('react-native-safe-area-context', () => require('react-native-safe-area-context/jest/mock').default);
 
 jest.mock('react-native-image-crop-picker', () => ({
@@ -112,3 +126,12 @@ jest.mock('react-native-camera-kit', () => {
     CameraType: { Front: 'front', Back: 'back' },
   };
 });
+
+// App.tsx registers the platform's ClientSideInfoProvider at startup; tests that drive the
+// session layer (check-session / login build their request body from it) need one too. The
+// real one reads native device info, so register a bare subclass with the default values.
+{
+  const { ClientSideInfoProvider } = require('./src/client-side.Commons/userSession/ClientSideInfoProvider');
+  class TestClientSideInfoProvider extends ClientSideInfoProvider {}
+  ClientSideInfoProvider.SetInstance(new TestClientSideInfoProvider());
+}

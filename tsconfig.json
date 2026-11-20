@@ -8,6 +8,9 @@
       "@test-utils": [
         "./src/test/test-utils.tsx"
       ],
+      "@app-hash": [
+        "./app-hash.default.ts"
+      ],
       "@server-side-base-url": [
         "./server-side-base-url.ts"
       ]

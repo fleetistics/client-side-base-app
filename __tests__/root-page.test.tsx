@@ -8,10 +8,13 @@ import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import { GlobalAlert } from '@/client-side.Commons/lib/global-alert';
 import { GlobalToastImpl } from '@/app.Commons/lib/global-toast-impl';
 import { GlobalAlertImpl } from '@/app.Commons/lib/global-alert-impl';
+import { MobileSessionKeyStore } from '@/client-side.Impl/userSession/MobileSessionKeyStore';
 
 // The router is rendered without App's session gate (which needs a server), exactly as App mounts it.
 beforeEach(() => {
   jest.useFakeTimers();
+  // App.tsx registers the key store at startup; RootPage reads the biometry type from it.
+  MobileSessionKeyStore.Register();
   GlobalToast.SetInstance(new GlobalToastImpl());
   GlobalAlert.SetInstance(new GlobalAlertImpl());
 });
