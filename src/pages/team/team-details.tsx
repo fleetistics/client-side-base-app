@@ -108,7 +108,7 @@ export function TeamDetailsPage({ navigation }: ScreenProps<'TeamDetailsPage'>) 
         notifyAuthLost();
         return;
       }
-      LocationReportEnabledManager.GetInstance().SetHasCompany(true);
+      LocationReportEnabledManager.GetInstance().SetReportEnabled(true);
       TeamContextService.StartTeam(teamId);
       GlobalToast.ShowSuccess(t('Mission started'));
       navigation.replace('MainMap');

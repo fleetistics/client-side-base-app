@@ -23,7 +23,7 @@ import { AppErrorBoundary } from '@/app.Commons/lib/app-error-boundary';
 import { initI18n } from '@/client-side.Commons/i18n/i18n';
 import { useTranslationUpdater } from '@/client-side.Commons/i18n/translationUpdater';
 import { reactNativeI18nPlatform } from '@/app.Commons/i18n/platform';
-import { LocationInitializer } from '@/client-side.Impl/bootstrap/location-initializer';
+import { LocationInitializer } from '@/app.Commons/bootstrap/location-initializer';
 import { User } from 'lucide-react-native';
 import { UserSettingsProvider } from '@/client-side.Commons/bootstrap/user-settings-provider';
 import { setE2EMode, isE2EMode } from '@/app.Commons/testSupport/e2e-mode';
@@ -37,11 +37,16 @@ import { GlobalAlertImpl } from '@/app.Commons/lib/global-alert-impl';
 import { MobileClientSideInfoProvider } from '@/client-side.Impl/userSession/MobileClientSideInfoProvider';
 import { MobileSessionKeyStore } from '@/client-side.Impl/userSession/MobileSessionKeyStore';
 import { USER_SESSION_CONSTS } from '@/client-side.Impl/config/userSession-consts';
+import { setRefreshFetchFn } from '@/client-side.Commons/dataLayer/core/apiSlice';
+import { createTimerFreeFetch } from '@/client-side.Impl/network/timer-free-fetch';
 
 
 // Registered at module load (not in an effect) so child components can use them from their first mount.
 GlobalToast.SetInstance(new GlobalToastImpl());
 GlobalAlert.SetInstance(new GlobalAlertImpl());
+
+// The token refresh must complete while backgrounded (location uploads need it); RN's fetch can't (see timer-free-fetch.ts).
+setRefreshFetchFn(createTimerFreeFetch(10000));
 
 MobileClientSideInfoProvider.Register();
 // Session key / rotation key in Keychain/Keystore; biometrics off until SetBiometricsEnabled(true).

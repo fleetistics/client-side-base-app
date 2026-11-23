@@ -3,8 +3,9 @@ import { APP_CONFIG } from '@/client-side.Impl/config/app-config';
 export const USER_SESSION_CONSTS = {
   AUTO_LOGIN_MODE: true,
   SESSION_CREDENTIALS_MODE: 'omit' as RequestCredentials_,
-  CHECK_SESSION_URL: APP_CONFIG.BASE_API_URL + "auth/check-session",
+  CHECK_SESSION_URL: APP_CONFIG.BASE_API_URL + "auth/check-app-session",
   REFRESH_TOKEN_URL: APP_CONFIG.BASE_API_URL + "auth/refresh",
+  REFRESH_LOCATION_TOKEN_URL: APP_CONFIG.BASE_API_URL + "auth/refresh-app-location-token",
   LOGIN_URL: APP_CONFIG.BASE_API_URL + "auth/app_auto_login",
   LOGOUT_URL: APP_CONFIG.BASE_API_URL + "auth/logout",
   

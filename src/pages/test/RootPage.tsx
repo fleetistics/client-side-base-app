@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Switch, View } from 'react-native';
+import { DevSettings, Platform, Switch, View } from 'react-native';
 import { Text } from '@/app.Commons/components/controls/text';
 import { Button } from '@/app.Commons/components/controls/button';
 import { GlobalToast } from '@/client-side.Commons/lib/global-toast';
 import { useLogoutMutation } from '@/client-side.Commons/userSession/userSessionApi';
+import { LocationReportEnabledManager } from '@/client-side.Impl/services/location-report-enabler';
 import { MobileSessionKeyStore } from '@/client-side.Impl/userSession/MobileSessionKeyStore';
 import type { ScreenProps } from '@/navigator/pages-config';
 
@@ -26,6 +27,18 @@ export function RootPage({ navigation }: ScreenProps<'RootPage'>) {
       setIsBiometryEnabled(MobileSessionKeyStore.IsBiometryEnabled());
       setIsBiometryBusy(false);
     }
+  };
+
+  const [isReportEnabled, setIsReportEnabled] = useState(() => LocationReportEnabledManager.GetInstance().IsReportEnabled());
+  const toggleReportEnabled = (enabled: boolean) => {
+    LocationReportEnabledManager.GetInstance().SetReportEnabled(enabled);
+    setIsReportEnabled(enabled);
+  };
+
+  // Reloads the JS bundle (not a native process restart). DevSettings.reload only works in dev builds.
+  const restart = () => {
+    if (Platform.OS === 'web') (globalThis as any).location.reload();
+    else DevSettings.reload();
   };
 
   const wipe = async () => {
@@ -65,8 +78,19 @@ export function RootPage({ navigation }: ScreenProps<'RootPage'>) {
           onValueChange={toggleBiometry}
         />
       </View>
+      <View className="flex-row items-center gap-3">
+        <Text>Location report enabled</Text>
+        <Switch
+          testID="location-report-enabled-switch"
+          value={isReportEnabled}
+          onValueChange={toggleReportEnabled}
+        />
+      </View>
       <Button variant="destructive" disabled={isLoggingOut} onPress={() => logout()}>
         <Text>Logout</Text>
+      </Button>
+      <Button testID="restart-button" variant="outline" onPress={restart}>
+        <Text>Restart</Text>
       </Button>
       <Button testID="wipe-button" variant="destructive" onPress={wipe}>
         <Text>Wipe</Text>
